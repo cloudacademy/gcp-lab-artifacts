@@ -1,0 +1,6 @@
+imports:
+- path: deployment.jinja
+
+resources:
+- name: lab
+  type: deployment.jinja
