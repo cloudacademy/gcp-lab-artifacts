@@ -1,0 +1,11 @@
+resources:
+- name: signer-serviceaccount
+  type: iam.v1.serviceAccount
+  properties:
+    accountId: storage-signer
+    displayName: storage-signer
+- name: ca-lab-bucket-{{ env["current_time"] }}
+  type: storage.v1.bucket
+  properties:
+    storageClass: REGIONAL
+    location: us-central1
