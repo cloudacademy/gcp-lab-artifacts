@@ -25,11 +25,23 @@ properties:
   zone:
     type: string
     description: Zone in which the cluster should run.
-    default: 
+    default: us-central-1b
   initialNodeCount:
     type: integer
     description: Initial number of nodes desired in the cluster.
-    default: 3
+    default: 2
+  k8sVersion:
+    type: string
+    description: Initial Kubernetes version running on the nodes.
+    default: '1.11'
+  machineType:
+    type: string
+    description: Machine Type of cluster nodes.
+    default: 'n1-standard-1'
+  diskSizeGb:
+    type: integer
+    description: Disk size for cluster nodes in GB.
+    default: 10
 
 outputs:
   clusterType:
