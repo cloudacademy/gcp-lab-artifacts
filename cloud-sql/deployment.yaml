@@ -1,0 +1,6 @@
+imports:
+- path: deployment.jinja
+
+resources:
+- name: calab-db
+  type: deployment.jinja
