@@ -1,0 +1,20 @@
+resources:
+- name: calab-db-{{ env["current_time"] }}
+  type: sqladmin.v1beta4.instance
+  properties:
+    backendType: SECOND_GEN
+    instanceType: CLOUD_SQL_INSTANCE
+    databaseVersion: POSTGRES_11
+    region: us-central1
+    readReplicas: 1
+    settings:
+      tier: db-f1-micro
+      storageAutoResize: false
+      locationPreference:
+        zone: us-central1-a
+      activationPolicy: ALWAYS
+      replicationType: SYNCHRONOUS
+      dataDiskSizeGb: 10
+      dataDiskType: PD_SSD
+      backupConfiguration:
+        enabled: false
