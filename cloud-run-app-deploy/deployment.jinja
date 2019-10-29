@@ -1,0 +1,6 @@
+resources:
+- name: ca-lab-build-logs-{{ env["current_time"] }}
+  type: storage.v1.bucket
+  properties:
+    storageClass: REGIONAL
+    location: us-central1
