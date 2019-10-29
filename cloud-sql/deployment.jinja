@@ -18,3 +18,7 @@ resources:
       dataDiskType: PD_SSD
       backupConfiguration:
         enabled: false
+      ipConfiguration:
+        authorizedNetworks:
+        - kind: sql#aclEntry
+          value: 0.0.0.0/0
