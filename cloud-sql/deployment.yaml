@@ -1,6 +1,3 @@
-imports:
-- path: deployment.jinja
-
 resources:
 - name: calab-db
-  type: deployment.jinja
+  type: https://raw.githubusercontent.com/cloudacademy/gcp-lab-artifacts/master/cloud-sql/deployment.jinja
