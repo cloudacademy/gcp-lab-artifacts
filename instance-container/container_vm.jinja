@@ -1,0 +1,21 @@
+resources:
+- name: ca-lab-vm
+  type: compute.v1.instance
+  properties:
+    machineType: zones/us-central1-a/machineTypes/n1-standard-1
+    metadata:
+      items:
+      - key: gce-container-declaration
+        value: |
+          {{ imports[properties['containerManifest']]|indent(12) }}
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      autoDelete: true
+      boot: true
+      initializeParams:
+        sourceImage: projects/cos-cloud/global/images/cos-69-10895-385-0
+    networkInterfaces:
+    - accessConfigs:
+      - name: external-nat
+        type: ONE_TO_ONE_NAT
