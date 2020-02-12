@@ -34,4 +34,4 @@ resources:
           type: ONE_TO_ONE_NAT
       network: {{ GlobalComputeUrl(env['project'],  'networks', 'default') }}
     serviceAccounts:
-    - email: vm-serviceaccount@{{ project }}.iam.gserviceaccount.com
+    - email: vm-serviceaccount@{{ env['project'] }}.iam.gserviceaccount.com
