@@ -43,6 +43,7 @@ resources:
           diskName: {{ BASE_NAME }}-disk
           sourceImage: {{ GlobalComputeUrl('cos-cloud', 'images', properties['containerImage']) }}
     networkInterfaces:
+<<<<<<< HEAD
       - accessConfigs:
           - name: external-nat
             type: ONE_TO_ONE_NAT
@@ -52,3 +53,9 @@ resources:
         scopes:
         - https://www.googleapis.com/auth/logging.write
         - https://www.googleapis.com/auth/monitoring.write
+=======
+    - accessConfigs:
+      - name: external-nat
+        type: ONE_TO_ONE_NAT
+      network: {{ GlobalComputeUrl(env['project'],  'networks', 'default') }}
+>>>>>>> d2fab9ec3361398ae3093e7d4a94a5616e930641
