@@ -17,19 +17,21 @@ resources:
     machineType: {{ ZonalComputeUrl(env['project'], properties['zone'], 'machineTypes', 'n1-standard-1') }}
     metadata:
       items:
-        - key: gce-container-declaration
-          value: |
-            {{ imports[properties['containerManifest']]|indent(12) }}
+      - key: gce-container-declaration
+        value: |
+          {{ imports[properties['containerManifest']]|indent(12) }}
     disks:
-      - deviceName: boot
-        type: PERSISTENT
-        autoDelete: true
-        boot: true
-        initializeParams:
-          diskName: {{ BASE_NAME }}-disk
-          sourceImage: {{ GlobalComputeUrl('cos-cloud', 'images', properties['containerImage']) }}
+    - deviceName: boot
+      type: PERSISTENT
+      autoDelete: true
+      boot: true
+      initializeParams:
+        diskName: {{ BASE_NAME }}-disk
+        sourceImage: {{ GlobalComputeUrl('cos-cloud', 'images', properties['containerImage']) }}
     networkInterfaces:
-      - accessConfigs:
-          - name: external-nat
-            type: ONE_TO_ONE_NAT
-        network: {{ GlobalComputeUrl(env['project'],  'networks', 'default') }}
+    - accessConfigs:
+        - name: external-nat
+          type: ONE_TO_ONE_NAT
+      network: {{ GlobalComputeUrl(env['project'],  'networks', 'default') }}
+    serviceAccounts:
+    - email: vm-serviceaccount@{{ project }}.iam.gserviceaccount.com
