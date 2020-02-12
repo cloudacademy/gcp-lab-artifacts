@@ -30,8 +30,6 @@ resources:
         sourceImage: {{ GlobalComputeUrl('cos-cloud', 'images', properties['containerImage']) }}
     networkInterfaces:
     - accessConfigs:
-        - name: external-nat
-          type: ONE_TO_ONE_NAT
+      - name: external-nat
+        type: ONE_TO_ONE_NAT
       network: {{ GlobalComputeUrl(env['project'],  'networks', 'default') }}
-    serviceAccounts:
-    - email: vm-serviceaccount@{{ env['project'] }}.iam.gserviceaccount.com
