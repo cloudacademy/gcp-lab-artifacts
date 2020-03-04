@@ -1,0 +1,24 @@
+resources:
+{% for index in range(1, properties['count'] + 1) %}
+{% set NAME_PREFIX = properties['namePrefix'] + '-' +  env['project'] %}
+- name: {{ NAME_PREFIX }}
+  type: compute.v1.instance
+  properties:
+    zone: {{ properties['zone'] }}
+    machineType: https://www.googleapis.com/compute/v1/projects/{{ env['project'] }}/zones/{{ properties['zone'] }}/machineTypes/{{ properties['machineType'] }}
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        diskName: {{ NAME_PREFIX }}-disk
+        sourceImage: {{ properties['image'] }}
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/{{ env['project'] }}/global/networks/default
+      {% if properties['hasExternalIp'] %}
+      accessConfigs:
+      - name: external-nat
+        type: ONE_TO_ONE_NAT
+      {% endif %}
+{% endfor %}
