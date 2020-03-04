@@ -1,6 +1,6 @@
 resources:
 {% for index in range(1, properties['count'] + 1) %}
-{% set NAME_PREFIX = properties['namePrefix'] + '-' +  env['project'] %}
+{% set NAME_PREFIX = properties['namePrefix'] + '-' +  env['project'] + '-' + index|string %}
 - name: {{ NAME_PREFIX }}
   type: compute.v1.instance
   properties:
