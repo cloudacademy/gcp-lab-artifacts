@@ -7,6 +7,6 @@ resources:
   properties:
     zone: us-central1-b
     initialNodeCount: 2
-    k8sVersion: '1.13'
+    k8sVersion: '1.15'
     machineType: 'n1-standard-1'
     diskSizeGb: 10
