@@ -1,6 +1,0 @@
-- name: bind-iam-policy
-  type: gcp-types/cloudresourcemanager-v1:virtual.projects.iamMemberBinding
-  properties:
-    resource: {{ env["project"] }}
-    role: roles/dlp.admin
-    member: serviceAccount:dlp-sa@{{ env["project"] }}.iam.gserviceaccount.com
