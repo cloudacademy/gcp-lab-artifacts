@@ -14,11 +14,21 @@ limitations under the License.
 #}
 
 resources:
+- name: default-allow-http
+  type: compute.v1.firewall
+  properties:
+    targetTags: ["http"]
+    sourceRanges: ["0.0.0.0/0"]
+    allowed:
+      - IPProtocol: TCP
+        ports: ["80"]  
 - name: {{ env["name"] }}
   type: compute.v1.instance
   properties:
     zone: {{ properties["zone"] }}
     machineType: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
+    tags:
+      items: ["http"]
     disks:
     - deviceName: boot
       type: PERSISTENT
