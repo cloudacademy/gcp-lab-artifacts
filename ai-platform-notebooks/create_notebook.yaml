@@ -16,7 +16,7 @@ imports:
 - path: notebook_instance.jinja
 
 resources:
-- name: my-notebook
+- name: calab-notebook
   type: notebook_instance.jinja
 
 #### EXAMPLES ####
