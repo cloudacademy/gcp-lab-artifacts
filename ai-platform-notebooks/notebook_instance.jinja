@@ -38,9 +38,9 @@ resources:
     metadata:
      items:
      - key: startup-script
-        value: |
-          #! /bin/bash
-          git clone https://github.com/cloudacademy/ca-reviewing-product-inventory.git
+       value: |
+         #! /bin/bash
+         git clone https://github.com/cloudacademy/ca-reviewing-product-inventory.git
      {% if properties["mail"] %}
      - key: proxy-user-mail
        value: {{ properties["mail"] }}
