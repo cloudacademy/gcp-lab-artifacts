@@ -54,12 +54,12 @@ resources:
           iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080
           iptables-save
           mkdir /repo
-          git clone {{ properties["git-repo"] }} /repo
           cp -R /repo/* /home/jupyter
           while ! systemctl status jupyter | grep -m1 "active (running)"; do
             sleep 1
           done
           rm -rf /home/jupyter/
+          git clone {{ properties["git-repo"] }} /repo
           mkdir -p /home/jupyter/.jupyter/
           echo "c.NotebookApp.allow_origin = '*'" > /home/jupyter/.jupyter/jupyter_notebook_config.py
           echo "c.NotebookApp.ip = '0.0.0.0'" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
