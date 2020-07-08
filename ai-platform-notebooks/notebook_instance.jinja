@@ -62,7 +62,7 @@ resources:
          iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080
          iptables-save
          mkdir /repo
-         git clone https://github.com/cloudacademy/ca-reviewing-product-inventory.git /repo
+         git clone {{ properties["git-repo"] }} /repo
          cp -R /repo/* /home/jupyter
      {% if properties["mail"] %}
      - key: proxy-user-mail
