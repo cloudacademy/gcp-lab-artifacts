@@ -46,32 +46,32 @@ resources:
       - name: External NAT
         type: ONE_TO_ONE_NAT
     metadata:
-     items:
-     - key: startup-script
-       value: |
-         #! /bin/bash
-         rm -rf /home/jupyter/
-         mkdir -p /home/jupyter/.jupyter/
-         echo "c.NotebookApp.allow_origin = '*'" > /home/jupyter/.jupyter/jupyter_notebook_config.py
-         echo "c.NotebookApp.ip = '0.0.0.0'" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
-         echo "c.NotebookApp.port = 8080" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
-         echo "c.NotebookApp.token = ''" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
-         chown -R jupyter:jupyter /home/jupyter/
-         systemctl restart jupyter
-         iptables -t nat -A PREROUTING -p TCP --dport 80 -j REDIRECT --to-port 8080
-         iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080
-         iptables-save
-         mkdir /repo
-         git clone {{ properties["git-repo"] }} /repo
-         cp -R /repo/* /home/jupyter
-     {% if properties["mail"] %}
-     - key: proxy-user-mail
-       value: {{ properties["mail"] }}
-     {% endif %}
-     - key: proxy-mode
-       value: {{ properties["proxy-mode"] }}
-     - key: install-nvidia-driver
-       value: "True"
+      items:
+      - key: startup-script
+        value: |
+          #! /bin/bash
+          rm -rf /home/jupyter/
+          mkdir -p /home/jupyter/.jupyter/
+          echo "c.NotebookApp.allow_origin = '*'" > /home/jupyter/.jupyter/jupyter_notebook_config.py
+          echo "c.NotebookApp.ip = '0.0.0.0'" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
+          echo "c.NotebookApp.port = 8080" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
+          echo "c.NotebookApp.token = ''" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
+          chown -R jupyter:jupyter /home/jupyter/
+          systemctl restart jupyter
+          iptables -t nat -A PREROUTING -p TCP --dport 80 -j REDIRECT --to-port 8080
+          iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080
+          iptables-save
+          mkdir /repo
+          git clone {{ properties["git-repo"] }} /repo
+          cp -R /repo/* /home/jupyter
+      {% if properties["mail"] %}
+      - key: proxy-user-mail
+        value: {{ properties["mail"] }}
+      {% endif %}
+      - key: proxy-mode
+        value: {{ properties["proxy-mode"] }}
+      - key: install-nvidia-driver
+        value: "True"
     {% if properties["gpu-type"] %}
     guestAccelerators:
       - acceleratorType: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/acceleratorTypes/{{ properties["gpu-type"] }}
