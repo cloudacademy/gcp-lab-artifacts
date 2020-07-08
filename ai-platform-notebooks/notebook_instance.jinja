@@ -50,6 +50,15 @@ resources:
       - key: startup-script
         value: |
           #! /bin/bash
+          iptables -t nat -A PREROUTING -p TCP --dport 80 -j REDIRECT --to-port 8080
+          iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080
+          iptables-save
+          mkdir /repo
+          git clone {{ properties["git-repo"] }} /repo
+          cp -R /repo/* /home/jupyter
+          while ! systemctl status jupyter | grep -m1 "active (running)"; do
+            sleep 1
+          done
           rm -rf /home/jupyter/
           mkdir -p /home/jupyter/.jupyter/
           echo "c.NotebookApp.allow_origin = '*'" > /home/jupyter/.jupyter/jupyter_notebook_config.py
@@ -58,12 +67,6 @@ resources:
           echo "c.NotebookApp.token = ''" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
           chown -R jupyter:jupyter /home/jupyter/
           systemctl restart jupyter
-          iptables -t nat -A PREROUTING -p TCP --dport 80 -j REDIRECT --to-port 8080
-          iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080
-          iptables-save
-          mkdir /repo
-          git clone {{ properties["git-repo"] }} /repo
-          cp -R /repo/* /home/jupyter
       {% if properties["mail"] %}
       - key: proxy-user-mail
         value: {{ properties["mail"] }}
