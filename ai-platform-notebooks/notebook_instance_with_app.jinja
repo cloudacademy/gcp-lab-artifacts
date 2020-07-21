@@ -73,17 +73,19 @@ resources:
           apt update
           #sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password rootpw"
           #sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password rootpw"
-          apt-get install -y mysql-server
-          #mysql --user="root" --password="rootpw" --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'"
-          #mysql --user="root" --password="rootpw" --execute="GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'password'"
-          mysql --user="root" --password="rootpw" --execute="CREATE DATABASE app;"
+          DEBIAN_FRONTEND="noninteractive" apt-get install -y mysql-server
+          mysql --user="root" --password="rootpw" --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'"
+          mysql --user="root" --password="password" --execute="GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION"
+          systemctl start mysql
+          mysql --user="root" --password="password" --execute="CREATE DATABASE app;"
 
           git clone https://github.com/cloudacademy/gcp-lab-artifacts.git /artifacts
           mkdir /app
           unzip /artifacts/ai-platform-notebooks/app.zip -d /app
           npm install --prefix /app package.json
-          DB_USER=root DB_PASSWORD= DB_NAME=app DB_HOST=localhost nohup node /app/app.js &
+          DB_USER=root DB_PASSWORD=password DB_NAME=app DB_HOST=localhost nohup node /app/app.js &
           echo "127.0.0.1 us-central1-calabs-dev.cloudfunctions.net" >> /etc/hosts
+          curl -X POST -H "Content-Type: application/json" -d '{"message": "First message"}' http://us-central1-calabs-dev.cloudfunctions.net:3000/ca-post-message
 
       {% if properties["mail"] %}
       - key: proxy-user-mail
