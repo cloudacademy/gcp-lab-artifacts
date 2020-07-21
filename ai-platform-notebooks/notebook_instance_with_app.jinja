@@ -68,6 +68,7 @@ resources:
           chown -R jupyter:jupyter /home/jupyter/
           systemctl restart jupyter
 
+          set -x
           wget http://repo.mysql.com/mysql-apt-config_0.8.13-1_all.deb
           DEBIAN_FRONTEND="noninteractive" dpkg -i mysql-apt-config_0.8.13-1_all.deb
           apt update
