@@ -83,8 +83,8 @@ resources:
           git clone https://github.com/cloudacademy/gcp-lab-artifacts.git /artifacts
           mkdir /app
           unzip /artifacts/ai-platform-notebooks/app.zip -d /app
-          npm install --prefix /app package.json
-          DB_USER=root DB_PASSWORD=password DB_NAME=app DB_HOST=localhost nohup node /app/app.js &
+          /opt/conda/bin/npm install --prefix /app package.json
+          DB_USER=root DB_PASSWORD=password DB_NAME=app DB_HOST=localhost nohup /opt/conda/bin/node /app/app.js &
           echo "127.0.0.1 us-central1-calabs-dev.cloudfunctions.net" >> /etc/hosts
           curl -X POST -H "Content-Type: application/json" -d '{"message": "First message"}' http://us-central1-calabs-dev.cloudfunctions.net:3000/ca-post-message
 
