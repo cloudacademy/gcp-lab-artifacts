@@ -1,0 +1,110 @@
+{#
+Copyright 2019 Google Inc
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+#}
+
+resources:
+- name: default-allow-http
+  type: compute.v1.firewall
+  properties:
+    targetTags: ["http"]
+    sourceRanges: ["0.0.0.0/0"]
+    allowed:
+      - IPProtocol: TCP
+        ports: ["80"]  
+- name: {{ env["name"] }}
+  type: compute.v1.instance
+  properties:
+    zone: {{ properties["zone"] }}
+    machineType: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
+    tags:
+      items: ["http"]
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/deeplearning-platform-release/global/images/family/{{ properties["imageFamily"] }}
+    networkInterfaces:
+    {% if properties["network"] %}
+    - network: {{ properties["network"] }}
+    {% else %}
+    - network: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/global/networks/default
+    {% endif %}
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #! /bin/bash
+          iptables -t nat -A PREROUTING -p TCP --dport 80 -j REDIRECT --to-port 8080
+          iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080
+          iptables-save
+          mkdir /repo
+          while ! systemctl status jupyter | grep -m1 "active (running)"; do
+            sleep 1
+          done
+          rm -rf /home/jupyter/tutorials
+          git clone {{ properties["git-repo"] }} /repo
+          cp -R /repo/* /home/jupyter
+          mkdir -p /home/jupyter/.jupyter/
+          echo "c.NotebookApp.allow_origin = '*'" > /home/jupyter/.jupyter/jupyter_notebook_config.py
+          echo "c.NotebookApp.ip = '0.0.0.0'" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
+          echo "c.NotebookApp.port = 8080" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
+          echo "c.NotebookApp.token = ''" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
+          chown -R jupyter:jupyter /home/jupyter/
+          systemctl restart jupyter
+
+          wget http://repo.mysql.com/mysql-apt-config_0.8.13-1_all.deb
+          DEBIAN_FRONTEND="noninteractive" dpkg -i mysql-apt-config_0.8.13-1_all.deb
+          apt update
+          sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password rootpw"
+          sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password rootpw"
+          DEBIAN_FRONTEND="noninteractive" apt install -y mysql-server
+          mysql --user="root" --password="rootpw" --execute="CREATE DATABASE app;"
+
+          git clone https://github.com/cloudacademy/gcp-lab-artifacts.git /artifacts
+          mkdir /app
+          unzip /artifacts/ai-platform-notebooks/app.zip -d /app
+          DB_USER=root DB_PASSWORD=rootpw DB_NAME= DB_HOST=localhost nohup node app.js &
+
+      {% if properties["mail"] %}
+      - key: proxy-user-mail
+        value: {{ properties["mail"] }}
+      {% endif %}
+      - key: proxy-mode
+        value: {{ properties["proxy-mode"] }}
+      - key: install-nvidia-driver
+        value: "True"
+    {% if properties["gpu-type"] %}
+    guestAccelerators:
+      - acceleratorType: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/acceleratorTypes/{{ properties["gpu-type"] }}
+        acceleratorCount: {{ properties["gpu-count"] }}
+    scheduling:
+      onHostMaintenance: "TERMINATE"
+    {% endif %}
+    serviceAccounts:
+    {% if properties["service-account"] %}
+      - email: {{ properties["service-account"] }}
+        scopes:
+        - https://www.googleapis.com/auth/cloud-platform
+        - https://www.googleapis.com/auth/userinfo.email
+    {% else %}
+      - email: {{ env["project_number"] }}-compute@developer.gserviceaccount.com
+        scopes:
+        - https://www.googleapis.com/auth/cloud-platform
+        - https://www.googleapis.com/auth/userinfo.email
+    {% endif %}
