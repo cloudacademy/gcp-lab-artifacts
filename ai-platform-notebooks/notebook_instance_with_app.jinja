@@ -81,9 +81,9 @@ resources:
           unzip /artifacts/ai-platform-notebooks/app.zip -d /app
           cd /app
           npm install
-          DB_USER=root DB_PASSWORD=rootpw DB_NAME= DB_HOST=localhost nohup node app.js &
+          DB_USER=root DB_PASSWORD=rootpw DB_NAME=app DB_HOST=localhost nohup node app.js &
           echo "127.0.0.1 us-central1-calabs-dev.cloudfunctions.net" >> /etc/hosts
-          
+
       {% if properties["mail"] %}
       - key: proxy-user-mail
         value: {{ properties["mail"] }}
