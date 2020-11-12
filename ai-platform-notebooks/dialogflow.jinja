@@ -50,8 +50,10 @@ resources:
           #! /bin/bash
           set -x
           pip install dialogflow
-          GCP_PROJECT=$(gcloud config get-value project) python3 create_dialogflow_agent.py
-          
+          mkdir /repo
+          git clone https://github.com/cloudacademy/dialogflow_helper /repo
+          GCP_PROJECT=$(gcloud config get-value project) python3 /repo/dialogflow_helper.py
+
       {% if properties["mail"] %}
       - key: proxy-user-mail
         value: {{ properties["mail"] }}
