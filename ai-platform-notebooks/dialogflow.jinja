@@ -49,7 +49,9 @@ resources:
         value: |
           #! /bin/bash
           set -x
-          pip install dialogflow
+          python -m venv /app/env
+          PATH="/app/env/bin:$PATH"
+          pip install dialogflow==1.1.0
           mkdir /repo
           git clone https://github.com/cloudacademy/dialogflow_helper /repo
           GCP_PROJECT=$(gcloud config get-value project) python3 /repo/dialogflow_helper.py
