@@ -6,9 +6,9 @@ resources:
     machineType: zones/us-central1-c/machineTypes/f1-micro
     metadata:
       items:
-      - key: startup-script
-        value: |
-            {{ properties['startup-script'] }}
+        - key: startup-script
+          value: |
+          {{ properties['startup-script']|indent(10) }}
     disks:
     - deviceName: ca-lab-disk
       type: PERSISTENT
