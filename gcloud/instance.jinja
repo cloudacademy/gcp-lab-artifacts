@@ -1,0 +1,29 @@
+resources:
+- name: {{ properties['name'] }}
+  type: compute.v1.instance
+  properties:
+    zone: us-central1-c
+    machineType: zones/us-central1-c/machineTypes/f1-micro
+    metadata:
+      items:
+      - key: startup-script
+        value: {{ properties['startup-script'] }}
+    disks:
+    - deviceName: ca-lab-disk
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: projects/debian-cloud/global/images/debian-10-buster-v20201112
+        diskType: projects/ca-labs/zones/us-central1-c/diskTypes/pd-standard
+        diskSizeGb: 10
+    networkInterfaces:
+    - network: global/networks/default
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    scheduling: 
+      preemptible: true
+    serviceAccounts:
+      - email: {{ env['project_number'] }}-compute@developer.gserviceaccount.com
+        scopes: {{ properties['scopes'] }}
