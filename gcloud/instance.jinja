@@ -8,7 +8,7 @@ resources:
       items:
         - key: startup-script
           value: |
-          {{ properties['startup-script']|indent(10) }}
+            {{ properties['startup-script']|indent(12) }}
     disks:
     - deviceName: ca-lab-disk
       type: PERSISTENT
