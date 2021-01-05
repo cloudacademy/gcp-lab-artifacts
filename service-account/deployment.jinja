@@ -1,4 +1,9 @@
-{% set project = env['project'] %}
+{% set domain = env['project'].split(':') %}
+{% if domain|length >1 %}
+{% set projectName = domain[1] + '.' + domain[0] %}
+{% else %}
+{% set projectName = domain[0] %}
+{% endif %}
 {% set roles = properties['roles'] %}
 
 resources:
@@ -7,26 +12,14 @@ resources:
   properties:
     accountId: {{ project }}-svc-account
     displayName: {{ project }}-svc-account
+  accessControl:
+    gcpIamPolicy:
+      bindings:
 
-- name: get-iam-policy
-  action: gcp-types/cloudresourcemanager-v1:cloudresourcemanager.projects.getIamPolicy
-  properties:
-    resource: {{ project }}
-  metadata:
-    runtimePolicy:
-    - 'UPDATE_ALWAYS'
-
-- name: patch-iam-policy
-  action: gcp-types/cloudresourcemanager-v1:cloudresourcemanager.projects.setIamPolicy
-  properties:
-    resource: {{ project }}
-    policy: $(ref.get-iam-policy)
-    gcpIamPolicyPatch:
-      add:
 {% for role in roles %}
       - role: {{ role }}
         members:
-        - serviceAccount:$(ref.{{ project }}-svc-account.email)
+        - "serviceAccount:{{ project }}-svc-account@{{ projectName }}.iam.gserviceaccount.com"
 {% endfor %}
 
 outputs:
