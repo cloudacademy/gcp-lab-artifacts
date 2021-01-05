@@ -15,7 +15,6 @@ resources:
   accessControl:
     gcpIamPolicy:
       bindings:
-
 {% for role in roles %}
       - role: {{ role }}
         members:
