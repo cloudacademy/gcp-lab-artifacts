@@ -7,11 +7,11 @@
 {% set roles = properties['roles'] %}
 
 resources:
-- name: {{ project }}-svc-account
+- name: {{ projectName }}-svc-account
   type: iam.v1.serviceAccount
   properties:
-    accountId: {{ project }}-svc-account
-    displayName: {{ project }}-svc-account
+    accountId: {{ projectName }}-svc-account
+    displayName: {{ projectName }}-svc-account
   accessControl:
     gcpIamPolicy:
       bindings:
@@ -19,9 +19,9 @@ resources:
 {% for role in roles %}
       - role: {{ role }}
         members:
-        - "serviceAccount:{{ project }}-svc-account@{{ projectName }}.iam.gserviceaccount.com"
+        - "serviceAccount:{{ projectName }}-svc-account@{{ projectName }}.iam.gserviceaccount.com"
 {% endfor %}
 
 outputs:
 - name: serviceAccount
-  value: $(ref.{{ project }}-svc-account.email)
+  value: $(ref.{{ projectName }}-svc-account.email)
