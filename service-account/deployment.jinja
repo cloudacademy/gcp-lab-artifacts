@@ -16,7 +16,7 @@ resources:
 - name: bind-iam-policy
   type: gcp-types/cloudresourcemanager-v1:virtual.projects.iamMemberBinding
   properties:
-    resource: project_id
+    resource: {{ projectName }}
     role: {{ role }}
     member: serviceAccount:$(ref.{{ projectName }}-svc-account.email)
 {% endfor %}
