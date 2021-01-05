@@ -7,20 +7,20 @@
 {% set roles = properties['roles'] %}
 
 resources:
-- name: {{ projectName }}-svc-account
+- name: {{ projectName }}-sa
   type: iam.v1.serviceAccount
   properties:
-    accountId: {{ projectName }}-svc-account
-    displayName: {{ projectName }}-svc-account
+    accountId: {{ projectName }}-sa
+    displayName: {{ projectName }}-sa
+  accessControl:
+    gcpIamPolicy:
+      bindings:
 {% for role in roles %}
-- name: bind-iam-policy-{{ loop.index }}
-  type: gcp-types/cloudresourcemanager-v1:virtual.projects.iamMemberBinding
-  properties:
-    resource: {{ projectName }}
-    role: {{ role }}
-    member: serviceAccount:$(ref.{{ projectName }}-svc-account.email)
+      - role: {{ role }}
+        members:
+        - "serviceAccount:{{ projectName }}-sa@{{ projectName }}.iam.gserviceaccount.com"
 {% endfor %}
 
 outputs:
 - name: serviceAccount
-  value: $(ref.{{ projectName }}-svc-account.email)
+  value: $(ref.{{ projectName }}-sa.email)
