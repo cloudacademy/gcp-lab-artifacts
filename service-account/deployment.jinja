@@ -13,7 +13,7 @@ resources:
     accountId: {{ projectName }}-svc-account
     displayName: {{ projectName }}-svc-account
 {% for role in roles %}
-- name: bind-iam-policy
+- name: bind-iam-policy-{{ loop.index }}
   type: gcp-types/cloudresourcemanager-v1:virtual.projects.iamMemberBinding
   properties:
     resource: {{ projectName }}
