@@ -12,13 +12,13 @@ resources:
   properties:
     accountId: {{ projectName }}-sa
     displayName: {{ projectName }}-sa
-  accessControl:
-    gcpIamPolicy:
-      bindings:
 {% for role in roles %}
-      - role: {{ role }}
-        members:
-        - "serviceAccount:{{ projectName }}-sa@{{ projectName }}.iam.gserviceaccount.com"
+- name: bind-iam-policy-{{ loop.index }}
+  type: gcp-types/cloudresourcemanager-v1:virtual.projects.iamMemberBinding
+  properties:
+    resource: {{ projectName }}
+    role: {{ role }}
+    member: serviceAccount:$(ref.{{ projectName }}-sa.email)
 {% endfor %}
 
 outputs:
