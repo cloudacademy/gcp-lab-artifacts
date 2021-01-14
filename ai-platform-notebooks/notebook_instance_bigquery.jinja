@@ -93,3 +93,7 @@ resources:
         - https://www.googleapis.com/auth/cloud-platform
         - https://www.googleapis.com/auth/userinfo.email
     {% endif %}
+
+outputs:
+- name: externalIp
+  value: $(ref.{{ env["name"] }}.networkInterfaces[0].accessConfigs[0].natIP)
