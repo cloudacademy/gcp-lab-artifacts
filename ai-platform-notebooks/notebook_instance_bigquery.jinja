@@ -66,6 +66,9 @@ resources:
           echo "c.NotebookApp.port = 8080" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
           echo "c.NotebookApp.token = ''" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
           chown -R jupyter:jupyter /home/jupyter/
+          {% if properties["postprocessing"] %}
+          {{ properties["postprocessing"] }}
+          {% endif %}
           systemctl restart jupyter
       {% if properties["mail"] %}
       - key: proxy-user-mail
