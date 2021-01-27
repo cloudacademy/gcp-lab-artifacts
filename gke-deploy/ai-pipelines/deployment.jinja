@@ -26,6 +26,8 @@ resources:
       name: {{ CLUSTER_NAME }}
       initialClusterVersion: '{{ properties['k8sVersion'] }}'
       initialNodeCount: {{ properties['initialNodeCount'] }}
+      legacyAbac:
+        enabled: true
       nodeConfig:
         machineType: {{ properties['machineType'] }}
         diskSizeGb: {{ properties['diskSizeGb'] }}

@@ -127,6 +127,13 @@ resources:
     {% else %}
       - email: {{ env["project_number"] }}-compute@developer.gserviceaccount.com
         scopes:
-        - https://www.googleapis.com/auth/cloud-platform
-        - https://www.googleapis.com/auth/userinfo.email
+        - https://www.googleapis.com/auth/devstorage.read_only
+        - https://www.googleapis.com/auth/logging.write
+        - https://www.googleapis.com/auth/monitoring.write
+        - https://www.googleapis.com/auth/service.management.readonly
+        - https://www.googleapis.com/auth/servicecontrol
     {% endif %}
+
+outputs:
+- name: externalIp
+  value: $(ref.{{ env["name"] }}.networkInterfaces[0].accessConfigs[0].natIP)

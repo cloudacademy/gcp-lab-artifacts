@@ -48,10 +48,11 @@ resources:
       - key: startup-script
         value: |
           #! /bin/bash
+          set -x
           iptables -t nat -A PREROUTING -p TCP --dport 80 -j REDIRECT --to-port 8080
           iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8080
           iptables-save
-          /opt/conda/bin/conda install -c conda-forge google-cloud-bigquery   google-cloud-bigquery-storage   pandas   pyarrow
+          pip install google-cloud-bigquery google-cloud-bigquery-storage pandas pyarrow contextily shapely geopandas
           mkdir /repo
           while ! systemctl status jupyter | grep -m1 "active (running)"; do
             sleep 1
@@ -65,6 +66,9 @@ resources:
           echo "c.NotebookApp.port = 8080" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
           echo "c.NotebookApp.token = ''" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
           chown -R jupyter:jupyter /home/jupyter/
+          {% if properties["postprocessing"] %}
+          {{ properties["postprocessing"] }}
+          {% endif %}
           systemctl restart jupyter
       {% if properties["mail"] %}
       - key: proxy-user-mail
@@ -90,6 +94,10 @@ resources:
     {% else %}
       - email: {{ env["project_number"] }}-compute@developer.gserviceaccount.com
         scopes:
-        - https://www.googleapis.com/auth/cloud-platform
+        - https://www.googleapis.com/auth/bigquery
         - https://www.googleapis.com/auth/userinfo.email
     {% endif %}
+
+outputs:
+- name: externalIp
+  value: $(ref.{{ env["name"] }}.networkInterfaces[0].accessConfigs[0].natIP)
