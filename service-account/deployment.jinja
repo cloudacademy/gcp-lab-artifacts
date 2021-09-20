@@ -22,5 +22,7 @@ resources:
 {% endfor %}
 
 outputs:
+- name: name
+  value: $(ref.{{ projectName }}-sa.name)
 - name: serviceAccount
   value: $(ref.{{ projectName }}-sa.email)
