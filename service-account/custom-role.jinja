@@ -1,5 +1,5 @@
 resources:
-- name: Lab Custom Role
+- name: lab-custom-role
   type: gcp-types/iam-v1:projects.roles
   properties:
     parent: projects/{{ env["project"] }}
@@ -9,3 +9,6 @@ resources:
       description: Custom role for the lab
       stage: GA
       includedPermissions: {{ properties["includedPermissions"] }}
+outputs:
+- name: roleId
+  value: $(ref.lab-custom-role.roleId)
