@@ -1,9 +1,11 @@
+{% set roleId = "labcustomrole_" + {{ env["current_time"] }} %}
+
 resources:
 - name: lab-custom-role
   type: gcp-types/iam-v1:projects.roles
   properties:
     parent: projects/{{ env["project"] }}
-    roleId: labcustomrole_{{ env["current_time"] }}
+    roleId: {{ roleId }}
     role:
       title: LabCustomRole
       description: Custom role for the lab
@@ -11,4 +13,4 @@ resources:
       includedPermissions: {{ properties["includedPermissions"] }}
 outputs:
 - name: roleId
-  value: $(ref.lab-custom-role.roleId)
+  value: {{ roleId }}
