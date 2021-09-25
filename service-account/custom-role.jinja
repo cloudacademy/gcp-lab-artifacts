@@ -1,0 +1,11 @@
+resources:
+- name: Lab Custom Role
+  type: gcp-types/iam-v1:projects.roles
+  properties:
+    parent: projects/{{ env["project"] }}
+    roleId: labcustomrole_{{ env["current_time"] }}
+    role:
+      title: LabCustomRole
+      description: Custom role for the lab
+      stage: GA
+      includedPermissions: {{ properties["includedPermissions"] }}
