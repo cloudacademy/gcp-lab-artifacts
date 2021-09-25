@@ -1,4 +1,4 @@
-{% set roleId = "labcustomrole_" + env["current_time"] %}
+{% set roleId = "labcustomrole_" ~ env["current_time"] %}
 
 resources:
 - name: lab-custom-role
