@@ -13,4 +13,4 @@ resources:
       includedPermissions: {{ properties["includedPermissions"] }}
 outputs:
 - name: roleId
-  value: {{ roleId }}
+  value: {{ 'projects/' ~ env["project"] ~ '/' ~ roleId }}
