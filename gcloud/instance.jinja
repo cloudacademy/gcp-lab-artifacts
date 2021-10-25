@@ -15,8 +15,8 @@ resources:
       boot: true
       autoDelete: true
       initializeParams:
-        sourceImage: projects/debian-cloud/global/images/debian-10-buster-v20210817
-        diskType: projects/ca-labs/zones/us-central1-c/diskTypes/pd-standard
+        sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-10-buster-v20210512
+        diskType: projects/ca-labs/zones/us-central1-a/diskTypes/pd-standard
         diskSizeGb: 10
     networkInterfaces:
     - network: global/networks/default
