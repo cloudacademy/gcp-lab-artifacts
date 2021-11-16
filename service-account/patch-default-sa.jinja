@@ -1,0 +1,22 @@
+{% set roles = properties['roles'] %}
+
+- name: get-iam-policy
+  action: gcp-types/cloudresourcemanager-v1:cloudresourcemanager.projects.getIamPolicy
+  properties:
+    resource: {{ env['project_number'] }}
+  metadata:
+    runtimePolicy:
+    - 'UPDATE_ALWAYS'
+
+- name: patch-iam-policy
+  action: gcp-types/cloudresourcemanager-v1:cloudresourcemanager.projects.setIamPolicy
+  properties:
+    resource: {{ env['project_number'] }}
+    policy: $(ref.get-iam-policy)
+    gcpIamPolicyPatch:
+      add:
+{% for role in roles %}
+      - role: {{ role }}
+        members: 
+        - serviceAccount:{{ env['project_number'] }}-compute@developer.gserviceaccount.com
+{% endfor %}
