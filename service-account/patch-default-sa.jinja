@@ -1,5 +1,6 @@
 {% set roles = properties['roles'] %}
 
+resources:
 - name: get-iam-policy
   action: gcp-types/cloudresourcemanager-v1:cloudresourcemanager.projects.getIamPolicy
   properties:
