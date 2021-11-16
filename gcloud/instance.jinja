@@ -1,9 +1,11 @@
+{% set machineType = properties['machineType'] or 'f1-micro' %}
+
 resources:
 - name: {{ properties['name'] }}
   type: compute.v1.instance
   properties:
     zone: us-central1-a
-    machineType: zones/us-central1-a/machineTypes/f1-micro
+    machineType: zones/us-central1-a/machineTypes/{{ machineType }}
     metadata:
       items:
         - key: startup-script
@@ -27,3 +29,4 @@ resources:
     serviceAccounts:
       - email: {{ env['project_number'] }}-compute@developer.gserviceaccount.com
         scopes: {{ properties['scopes'] }}
+  
