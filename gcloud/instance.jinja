@@ -1,5 +1,5 @@
 {% set machineType = properties['machineType'] or 'f1-micro' %}
-{% set preemptible = properties['preemptible'] or 'true' %}
+{% set preemptible = properties['preemptible'] or true %}
 
 resources:
 - name: {{ properties['name'] }}
