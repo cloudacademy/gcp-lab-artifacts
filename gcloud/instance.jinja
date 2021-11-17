@@ -1,4 +1,5 @@
 {% set machineType = properties['machineType'] or 'f1-micro' %}
+{% set preemptible = properties['preemptible'] or 'true' %}
 
 resources:
 - name: {{ properties['name'] }}
@@ -25,7 +26,7 @@ resources:
       - name: External NAT
         type: ONE_TO_ONE_NAT
     scheduling: 
-      preemptible: true
+      preemptible: {{ preemptible }}
     serviceAccounts:
       - email: {{ env['project_number'] }}-compute@developer.gserviceaccount.com
         scopes: {{ properties['scopes'] }}
