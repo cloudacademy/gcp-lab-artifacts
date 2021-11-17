@@ -1,5 +1,5 @@
 {% set machineType = properties['machineType'] or 'f1-micro' %}
-{% set preemptible = properties['preemptible'] or true %}
+{% set preemptible = properties['preemptible'] or true %} # preemptible: 'false' in config to override (premptible: false will result in the or true being used)
 
 resources:
 - name: {{ properties['name'] }}
