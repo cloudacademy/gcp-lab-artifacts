@@ -31,3 +31,6 @@ resources:
       - email: {{ env['project_number'] }}-compute@developer.gserviceaccount.com
         scopes: {{ properties['scopes'] }}
   
+outputs:
+- name: externalIp
+  value: $(ref.{{ properties['name'] }}.networkInterfaces[0].accessConfigs[0].natIP)
