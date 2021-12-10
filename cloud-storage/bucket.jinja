@@ -1,11 +1,10 @@
 {% set random_name = env["current_time"] -%}
-{% set versioningEnabled = properties['versioningEnabled'] or false %}
+{% set versioningEnabled = properties['versioning']['enabled'] or false %}
 
 resources:
 - name: calabs-bucket-{{ random_name }}
   type: storage.v1.bucket
   properties:
-    location: US-CENTRAL1
     kind: storage#bucket
     storageClass: STANDARD
     versioning:
