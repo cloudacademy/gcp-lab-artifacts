@@ -16,3 +16,7 @@ resources:
     kind: storage#bucketAccessControl
     entity: allUsers
     role: WRITER
+
+outputs:
+- name: labBucketName
+  value: $(ref.calabs-bucket-{{ random_name }}.name)
