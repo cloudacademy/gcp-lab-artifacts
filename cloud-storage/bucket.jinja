@@ -1,5 +1,5 @@
 {% set random_name = env["current_time"] -%}
-{% set versioningEnabled = properties['versioningEnabled'] or 'false' %}
+{% set versioningEnabled = properties['versioningEnabled'] or false %}
 
 resources:
 - name: calabs-bucket-{{ random_name }}
