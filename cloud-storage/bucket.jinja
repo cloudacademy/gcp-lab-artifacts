@@ -1,0 +1,19 @@
+{% set random_name = env["current_time"] -%}
+{% set versioningEnabled = properties['versioningEnabled'] or 'false' %}
+
+resources:
+- name: calabs-bucket-{{ random_name }}
+  type: storage.v1.bucket
+  properties:
+    location: US-CENTRAL1
+    kind: storage#bucket
+    storageClass: STANDARD
+    versioning:
+      enabled: {{ versioningEnabled }}
+- name: calabs-bucket-{{ random_name }}-acl
+  action: gcp-types/storage-v1:storage.bucketAccessControls.insert
+  properties:
+    bucket: $(ref.calabs-bucket-{{ random_name }}.name)
+    kind: storage#bucketAccessControl
+    entity: allUsers
+    role: WRITER
