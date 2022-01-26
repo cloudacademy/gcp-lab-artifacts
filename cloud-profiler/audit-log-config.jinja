@@ -1,0 +1,23 @@
+resources:
+- name: get-iam-policy
+  action: gcp-types/cloudresourcemanager-v1:cloudresourcemanager.projects.getIamPolicy
+  properties:
+    resource: {{ env['project_number'] }}
+  metadata:
+    runtimePolicy:
+    - UPDATE_ALWAYS
+- name: patch-iam-policy
+  action: gcp-types/cloudresourcemanager-v1:cloudresourcemanager.projects.setIamPolicy
+  properties:
+    resource: {{ env['project_number'] }}
+    policy:
+      etag: "$(ref.get-iam-policy.etag)"
+      auditConfigs:
+      - auditLogConfigs:
+        - logType: DATA_WRITE
+        - logType: DATA_READ
+        service: cloudprofiler.googleapis.com
+    updateMask: auditConfigs,etag
+  metadata:
+    dependsOn:
+    - get-iam-policy
