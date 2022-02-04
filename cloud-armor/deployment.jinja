@@ -1,4 +1,35 @@
+{% set machineType = properties['machineType'] or 'f1-micro' %}
+{% set preemptible = properties['preemptible'] or true %} # preemptible: 'false' in config to override (premptible: false will result in the or true being used)
+
 resources:
+- type: gcp-types/compute-v1:instanceTemplates
+  name: {{ properties['name'] }}
+  properties:
+    properties:
+      machineType: {{ machineType }}
+      metadata:
+        items:
+          - key: startup-script
+            value: |
+              {{ properties['startup-script']|indent(14) }}
+      disks:
+      - deviceName: ca-lab-disk
+        boot: true
+        type: PERSISTENT
+        autoDelete: true
+        mode: READ_WRITE
+        initializeParams:
+          diskName: ca-lab-disk
+          sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-10-buster-v20210817
+      networkInterfaces:
+        - network: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/global/networks/default
+          accessConfigs:
+          - name: External NAT
+            type: ONE_TO_ONE_NAT
+      serviceAccounts:
+        - email: {{ env['project_number'] }}-compute@developer.gserviceaccount.com
+          scopes: {{ properties['scopes'] }}
+
 - name: ca-ip
   type: compute.v1.globalAddress
   
