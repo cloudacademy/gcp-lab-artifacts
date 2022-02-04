@@ -1,0 +1,23 @@
+resources:
+- name: ca-ip
+  type: compute.v1.globalAddress
+  
+- name: ca-mig
+  type: compute.v1.regionInstanceGroupManager
+  properties:
+    instanceTemplate: $(ref.{{ properties['name'] }}.selfLink)
+    targetSize: 2
+    region: us-central1 
+    
+- name: ca-health-check
+  type: compute.v1.httpHealthCheck
+  properties:
+    port: 80
+    checkIntervalSec: 5
+    timeoutSec: 5
+    unhealthyThreshold: 2
+    healthyThreshold: 2
+  
+outputs:
+- name: publicIP
+  value: $(ref.ca-ip.address)
