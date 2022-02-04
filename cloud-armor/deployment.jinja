@@ -29,6 +29,9 @@ resources:
       serviceAccounts:
         - email: {{ env['project_number'] }}-compute@developer.gserviceaccount.com
           scopes: {{ properties['scopes'] }}
+      tags:
+        items:
+          - ca-labs
 
 - name: ca-ip
   type: compute.v1.globalAddress
