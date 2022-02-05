@@ -36,7 +36,7 @@ resources:
 - name: ca-ip
   type: compute.v1.globalAddress
   
-- name: ca-lab-instance-group
+- name: ca-instance-group
   type: compute.v1.regionInstanceGroupManager
   properties:
     instanceTemplate: $(ref.{{ properties['name'] }}.selfLink)
