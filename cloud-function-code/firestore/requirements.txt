@@ -1,0 +1,2 @@
+functions-framework==3.0.0
+google-cloud-firestore==2.3.4
