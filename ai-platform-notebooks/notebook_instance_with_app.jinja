@@ -100,8 +100,9 @@ resources:
           EOF
           systemctl enable --now app.service
           echo "127.0.0.1 us-central1-calabs-dev.cloudfunctions.net" >> /etc/hosts
-          sleep 15
+          sleep 20
           curl -X POST -H "Content-Type: application/json" -d '{"message": "First message"}' http://us-central1-calabs-dev.cloudfunctions.net:3000/ca-post-message
+          curl -X GET -H 'Content-Type: application/json' http://us-central1-calabs-dev.cloudfunctions.net:3000/ca-get-messages
 
       {% if properties["mail"] %}
       - key: proxy-user-mail
