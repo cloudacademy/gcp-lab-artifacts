@@ -71,7 +71,7 @@ resources:
           set -x
           wget http://repo.mysql.com/mysql-apt-config_0.8.13-1_all.deb
           DEBIAN_FRONTEND="noninteractive" dpkg -i mysql-apt-config_0.8.13-1_all.deb
-          apt update
+          apt -o Acquire::AllowInsecureRepositories=true -o Acquire::AllowDowngradeToInsecureRepositories=true update
           #sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password rootpw"
           #sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password rootpw"
           DEBIAN_FRONTEND="noninteractive" apt-get install -y mysql-server
