@@ -36,5 +36,5 @@ resources:
       items: {{ properties['tags'] }}
   
 outputs:
-- name: externalIp
+- name: {{ properties['name'] }}-ip
   value: $(ref.{{ properties['name'] }}.networkInterfaces[0].accessConfigs[0].natIP)
