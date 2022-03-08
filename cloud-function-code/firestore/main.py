@@ -1,6 +1,7 @@
 from google.cloud import firestore
 
 def add_document(event, context):
+    print(event)
     db = firestore.Client(project='my-project-id')
     doc_ref = db.collection(u'users').document(u'alovelace')
     doc_ref.set({
@@ -10,6 +11,7 @@ def add_document(event, context):
     })
 
 def get_collection(event, context):
+    print(event)
     db = firestore.Client(project='my-project-id')
     users_ref = db.collection(u'users')
     docs = users_ref.stream()

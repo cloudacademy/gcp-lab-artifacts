@@ -1,0 +1,9 @@
+{% set region = properties['region'] or 'us-central1' %}
+   
+resources:
+- name: {{ properties['name'] }}
+  type: compute.v1.subnetwork
+  properties:
+    ipCidrRange: {{ properties["ipCidrRange"]}}
+    network: {{ properties["network"]}}
+    region: {{ region }}

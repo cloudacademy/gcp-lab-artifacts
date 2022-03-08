@@ -1,0 +1,40 @@
+{% set machineType = properties['machineType'] or 'f1-micro' %}
+{% set sourceImage = properties['sourceImage'] or 'https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-10-buster-v20210915' %}
+{% set preemptible = properties['preemptible'] or true %} # preemptible: 'false' in config to override (premptible: false will result in the or true being used)
+
+resources:
+- name: {{ properties['name'] }}
+  type: compute.v1.instance
+  properties:
+    zone: us-central1-a
+    machineType: zones/us-central1-a/machineTypes/{{ machineType }}
+    metadata:
+      items:
+        - key: startup-script
+          value: |
+            {{ properties['startup-script']|indent(12) }}
+    disks:
+    - deviceName: ca-{{ properties['name'] }}-disk
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: {{ sourceImage }}
+        diskSizeGb: 10
+    networkInterfaces:
+    - network: {{ properties["network"] }}
+      subnetwork: {{ properties["subnetwork"] }}
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    scheduling: 
+      preemptible: {{ preemptible }}
+    serviceAccounts:
+      - email: {{ env['project_number'] }}-compute@developer.gserviceaccount.com
+        scopes: {{ properties['scopes'] }}
+    tags:
+      items: {{ properties['tags'] }}
+  
+outputs:
+- name: externalIp
+  value: $(ref.{{ properties['name'] }}.networkInterfaces[0].accessConfigs[0].natIP)

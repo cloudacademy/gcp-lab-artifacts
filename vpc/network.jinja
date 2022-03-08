@@ -1,0 +1,7 @@
+{% set autoCreateSubnetworks = properties['autoCreateSubnetworks'] or false %}
+
+resources:
+- name: {{ properties['name'] }}
+  type: compute.v1.network
+  properties:
+    autoCreateSubnetworks: {{ autoCreateSubnetworks }}
