@@ -60,7 +60,7 @@ resources:
     targetTags: ["backend"]
     sourceTags: ["frontend"]
     allowed:
-    - IPProtocol: icmp
+      - IPProtocol: ICMP
 
 - name: allow-ssh-a
   type: compute.v1.firewall
@@ -70,8 +70,8 @@ resources:
     targetTags: ["frontend"]
     sourceRanges: ["0.0.0.0/0"]
     allowed:
-    - IPProtocol: tcp
-      ports: ['22']
+      - IPProtocol: TCP
+        ports: ["22"]
 
 # Network B Resources
 - name: network-b
@@ -113,5 +113,5 @@ resources:
     targetTags: ["frontend"]
     sourceRanges: ["0.0.0.0/0"]
     allowed:
-    - IPProtocol: tcp
-      ports: ['22']
+      - IPProtocol: TCP
+        ports: ["22"]
