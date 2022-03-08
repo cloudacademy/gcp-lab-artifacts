@@ -1,6 +1,7 @@
 {% set autoCreateSubnetworks = properties['autoCreateSubnetworks'] or false %}
 
 resources:
+# Network A Resources
 - name: network-a
   type: compute.v1.network
   properties:
@@ -32,18 +33,6 @@ resources:
       - https://www.googleapis.com/auth/monitoring.write
       - https://www.googleapis.com/auth/trace.append
 
-- name: network-b
-  type: compute.v1.network
-  properties:
-    autoCreateSubnetworks: {{ autoCreateSubnetworks }}
-
-- name: subnetwork-b
-  type: compute.v1.subnetwork
-  properties:
-    ipCidrRange: 10.2.0.0/20
-    network: $(ref.network-b.selfLink)
-    region: us-west1
-
 - name: backend-a
   type: https://raw.githubusercontent.com/cloudacademy/gcp-lab-artifacts/master/vpc/network-instance.jinja
   properties:
@@ -63,12 +52,44 @@ resources:
       - https://www.googleapis.com/auth/monitoring.write
       - https://www.googleapis.com/auth/trace.append
 
+- name: allow-icmp-to-backend
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.network-a.selfLink)
+    targetTags: ["backend"]
+    sourceTags: ["frontend"]
+    allowed:
+    - IPProtocol: icmp
+
+- name: allow-ssh-a
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.network-a.selfLink)
+    targetTags: ["frontend"]
+    sourceRanges: ["0.0.0.0/0"]
+    allowed:
+    - IPProtocol: tcp
+      ports: ['22']
+
+# Network B Resources
+- name: network-b
+  type: compute.v1.network
+  properties:
+    autoCreateSubnetworks: {{ autoCreateSubnetworks }}
+
+- name: subnetwork-b
+  type: compute.v1.subnetwork
+  properties:
+    ipCidrRange: 10.2.0.0/20
+    network: $(ref.network-b.selfLink)
+    region: us-west1
+
 - name: frontend-b
   type: https://raw.githubusercontent.com/cloudacademy/gcp-lab-artifacts/master/vpc/network-instance.jinja
   properties:
     name: frontend-b
-    network: $(ref.network-a.selfLink)
-    subnetwork: $(ref.subnetwork-a.selfLink)
+    network: $(ref.network-b.selfLink)
+    subnetwork: $(ref.subnetwork-b.selfLink)
     tags:
       - frontend
     startup-script: |
@@ -81,3 +102,13 @@ resources:
       - https://www.googleapis.com/auth/logging.write
       - https://www.googleapis.com/auth/monitoring.write
       - https://www.googleapis.com/auth/trace.append
+
+- name: allow-ssh-b
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.network-b.selfLink)
+    targetTags: ["frontend"]
+    sourceRanges: ["0.0.0.0/0"]
+    allowed:
+    - IPProtocol: tcp
+      ports: ['22']
