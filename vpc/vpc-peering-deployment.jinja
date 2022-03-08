@@ -55,6 +55,7 @@ resources:
 - name: allow-icmp-to-backend
   type: compute.v1.firewall
   properties:
+    priority: 2000
     network: $(ref.network-a.selfLink)
     targetTags: ["backend"]
     sourceTags: ["frontend"]
@@ -64,6 +65,7 @@ resources:
 - name: allow-ssh-a
   type: compute.v1.firewall
   properties:
+    priority: 1000
     network: $(ref.network-a.selfLink)
     targetTags: ["frontend"]
     sourceRanges: ["0.0.0.0/0"]
@@ -106,6 +108,7 @@ resources:
 - name: allow-ssh-b
   type: compute.v1.firewall
   properties:
+    priority: 1000
     network: $(ref.network-b.selfLink)
     targetTags: ["frontend"]
     sourceRanges: ["0.0.0.0/0"]
