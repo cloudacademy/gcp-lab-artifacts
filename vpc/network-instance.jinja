@@ -1,3 +1,4 @@
+{% set zone = properties['zone'] or 'us-central1-a' %}
 {% set machineType = properties['machineType'] or 'f1-micro' %}
 {% set sourceImage = properties['sourceImage'] or 'https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-10-buster-v20210915' %}
 {% set preemptible = properties['preemptible'] or true %} # preemptible: 'false' in config to override (premptible: false will result in the or true being used)
@@ -6,8 +7,8 @@ resources:
 - name: {{ properties['name'] }}
   type: compute.v1.instance
   properties:
-    zone: us-central1-a
-    machineType: zones/us-central1-a/machineTypes/{{ machineType }}
+    zone: {{ zone }}
+    machineType: zones/{{ zone }}/machineTypes/{{ machineType }}
     metadata:
       items:
         - key: startup-script

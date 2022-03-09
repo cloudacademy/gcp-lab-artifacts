@@ -1,4 +1,6 @@
 {% set autoCreateSubnetworks = properties['autoCreateSubnetworks'] or false %}
+{% set region1 = properties['region1'] or 'us-central1' %}
+{% set region2 = properties['region2'] or 'us-west1' %}
 
 resources:
 # Network A Resources
@@ -12,12 +14,13 @@ resources:
   properties:
     ipCidrRange: 10.1.0.0/20
     network: $(ref.network-a.selfLink)
-    region: us-central1
+    region: {{ region1 }}
 
 - name: frontend-a
   type: https://raw.githubusercontent.com/cloudacademy/gcp-lab-artifacts/master/vpc/network-instance.jinja
   properties:
     name: frontend-a
+    zone: {{ region1 }}-a
     network: $(ref.network-a.selfLink)
     subnetwork: $(ref.subnetwork-a.selfLink)
     tags:
@@ -37,6 +40,7 @@ resources:
   type: https://raw.githubusercontent.com/cloudacademy/gcp-lab-artifacts/master/vpc/network-instance.jinja
   properties:
     name: backend-a
+    zone: {{ region1 }}-a
     network: $(ref.network-a.selfLink)
     subnetwork: $(ref.subnetwork-a.selfLink)
     tags:
@@ -85,12 +89,13 @@ resources:
   properties:
     ipCidrRange: 10.2.0.0/20
     network: $(ref.network-b.selfLink)
-    region: us-west1
+    region: {{ region2 }}
 
 - name: frontend-b
   type: https://raw.githubusercontent.com/cloudacademy/gcp-lab-artifacts/master/vpc/network-instance.jinja
   properties:
     name: frontend-b
+    zone: {{ region2 }}-a
     network: $(ref.network-b.selfLink)
     subnetwork: $(ref.subnetwork-b.selfLink)
     tags:
