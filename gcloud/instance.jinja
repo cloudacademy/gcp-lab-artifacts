@@ -9,7 +9,7 @@ resources:
   type: compute.v1.instance
   properties:
     zone: {{ zone }}
-    machineType: zones/us-central1-a/machineTypes/{{ machineType }}
+    machineType: zones/{{ zone }}/machineTypes/{{ machineType }}
     metadata:
       items:
         - key: startup-script
