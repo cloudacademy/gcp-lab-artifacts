@@ -1,12 +1,14 @@
 {% set machineType = properties['machineType'] or 'f1-micro' %}
 {% set sourceImage = properties['sourceImage'] or 'https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-10-buster-v20211028' %}
 {% set preemptible = properties['preemptible'] or true %} # preemptible: 'false' in config to override (premptible: false will result in the or true being used)
+{% set zone = properties['zone'] or 'us-central1-a' %}
+{% set network = properties['network'] or 'global/networks/default' %}
 
 resources:
 - name: {{ properties['name'] }}
   type: compute.v1.instance
   properties:
-    zone: us-central1-a
+    zone: {{ zone }}
     machineType: zones/us-central1-a/machineTypes/{{ machineType }}
     metadata:
       items:
@@ -22,7 +24,7 @@ resources:
         sourceImage: {{ sourceImage }}
         diskSizeGb: 10
     networkInterfaces:
-    - network: global/networks/default
+    - network: {{ network }}
       accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT
