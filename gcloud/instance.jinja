@@ -25,6 +25,9 @@ resources:
         diskSizeGb: 10
     networkInterfaces:
     - network: {{ network }}
+      {% if properties["networkIP"] %}
+      networkIP: {{ properties["networkIP"] }}
+      {% endif %}
       accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT
