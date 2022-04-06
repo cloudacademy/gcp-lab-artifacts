@@ -28,6 +28,9 @@ resources:
       {% if properties["networkIP"] %}
       networkIP: {{ properties["networkIP"] }}
       {% endif %}
+      {% if properties["subnetwork"] %}
+      subnetwork: {{ properties["subnetwork"] }}
+      {% endif %}
       accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT
