@@ -14,6 +14,7 @@ resources:
       items:
         - key: startup-script
           value: |
+            sudo apt update && sudo apt install --only-upgrade google-cloud-sdk
             {{ properties['startup-script']|indent(12) }}
     disks:
     - deviceName: ca-lab-disk
