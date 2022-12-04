@@ -3,7 +3,7 @@
 {% set preemptible = properties['preemptible'] or true %} # preemptible: 'false' in config to override (premptible: false will result in the or true being used)
 {% set zone = properties['zone'] or 'us-central1-a' %}
 {% set network = properties['network'] or 'global/networks/default' %}
-{% set serviceAccountEmail = properties['serviceAccountEmail'] or env['project_number']-compute@developer.gserviceaccount.com %}
+{% set serviceAccountEmail = properties['serviceAccountEmail'] or env['project_number']'-compute@developer.gserviceaccount.com' %}
 
 resources:
 - name: {{ properties['name'] }}
