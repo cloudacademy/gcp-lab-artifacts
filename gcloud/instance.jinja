@@ -1,8 +1,9 @@
 {% set machineType = properties['machineType'] or 'f1-micro' %}
-{% set sourceImage = properties['sourceImage'] or 'https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-10-buster-v20220822' %}
+{% set sourceImage = properties['sourceImage'] or 'https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-10-buster' %}
 {% set preemptible = properties['preemptible'] or true %} # preemptible: 'false' in config to override (premptible: false will result in the or true being used)
 {% set zone = properties['zone'] or 'us-central1-a' %}
 {% set network = properties['network'] or 'global/networks/default' %}
+{% set serviceAccountEmail = properties['serviceAccountEmail'] or env['project_number'] ~ '-compute@developer.gserviceaccount.com' %}
 
 resources:
 - name: {{ properties['name'] }}
@@ -37,7 +38,7 @@ resources:
     scheduling: 
       preemptible: {{ preemptible }}
     serviceAccounts:
-      - email: {{ env['project_number'] }}-compute@developer.gserviceaccount.com
+      - email: {{ serviceAccountEmail }}
         scopes: {{ properties['scopes'] }}
   
 outputs:
