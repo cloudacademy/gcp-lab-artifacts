@@ -1,6 +1,6 @@
 {% set namePrefix = properties['name'] or 'calabs-bucket' %}
 {% set randomMaterial = env["current_time"] -%}
-{% set bucketName = namePrefix '-' randomMaterial %}
+{% set bucketName = namePrefix ~ '-' ~ randomMaterial %}
 {% set versioningEnabled = properties['versioning']['enabled'] or false %}
 
 resources:
