@@ -1,22 +1,24 @@
-{% set random_name = env["current_time"] -%}
+{% set namePrefix = properties['name'] or 'calabs-bucket' %}
+{% set randomMaterial = env["current_time"] -%}
+{% set bucketName = {{ namePrefix }}-{{ randomMaterial }} %}
 {% set versioningEnabled = properties['versioning']['enabled'] or false %}
 
 resources:
-- name: calabs-bucket-{{ random_name }}
+- name: {{ bucketName }}
   type: storage.v1.bucket
   properties:
     kind: storage#bucket
     storageClass: STANDARD
     versioning:
       enabled: {{ versioningEnabled }}
-- name: calabs-bucket-{{ random_name }}-acl
+- name: {{ bucketName }}-acl
   action: gcp-types/storage-v1:storage.bucketAccessControls.insert
   properties:
-    bucket: $(ref.calabs-bucket-{{ random_name }}.name)
+    bucket: $(ref.{{ bucketName }}.name)
     kind: storage#bucketAccessControl
     entity: allUsers
     role: WRITER
 
 outputs:
 - name: labBucketName
-  value: $(ref.calabs-bucket-{{ random_name }}.name)
+  value: $(ref.{{ bucketName }}.name)
