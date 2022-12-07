@@ -3,4 +3,4 @@ resources:
   name: iamcredentials-enable
   properties:
     consumerId: "project:{{ env['project'] }}"
-    serviceName: properties['serviceName']
+    serviceName: {{ properties['serviceName'] }}
