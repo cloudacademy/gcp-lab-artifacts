@@ -1,0 +1,6 @@
+project_name = "insert_project"
+region = "us-central1"
+zone = "us-central1-a"
+gcr_region = "us"
+service_name = "app"
+repository_name = "app"
