@@ -6,30 +6,17 @@ provider "google" {
 
 #----------------------------------------------------------------------------------------------
 #  CLOUD SOURCE REPOSITORY
-#      - Enable API
 #      - Create Repository
 #----------------------------------------------------------------------------------------------
 
-resource "google_project_service" "repo" {
-  service = "sourcerepo.googleapis.com"
-  disable_on_destroy = false
-}
-
 resource "google_sourcerepo_repository" "repo" {
   name = var.repository_name
-  depends_on = [google_project_service.repo]
 }
 
 #----------------------------------------------------------------------------------------------
 #  CLOUD BUILD
-#      - Enable API
 #      - Create Build Trigger
 #----------------------------------------------------------------------------------------------
-
-resource "google_project_service" "build" {
-  service = "cloudbuild.googleapis.com"
-  disable_on_destroy = false
-}
 
 resource "google_cloudbuild_trigger" "cloud_build_trigger" {
   name = var.repository_name
@@ -46,31 +33,21 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
     _REGION = var.region
   }
 
-  depends_on = [google_project_service.build, google_sourcerepo_repository.repo]
+  depends_on = [google_sourcerepo_repository.repo]
 }
 
 #----------------------------------------------------------------------------------------------
 #  CLOUD REGISTRY
-#      - Enable API
 #      - Create Repository
 #----------------------------------------------------------------------------------------------
 
-resource "google_project_service" "registry" {
-  service = "containerregistry.googleapis.com"
-  disable_on_destroy = false
-}
+
 
 #----------------------------------------------------------------------------------------------
 #  CLOUD RUN
-#      - Enable API
 #      - Create Service
 #      - Expose the service to the public
 #----------------------------------------------------------------------------------------------
-
-resource "google_project_service" "run" {
-  service = "run.googleapis.com"
-  disable_on_destroy = false
-}
 
 resource "google_cloud_run_service" "my-service" {
   name = var.service_name
@@ -78,12 +55,11 @@ resource "google_cloud_run_service" "my-service" {
 
   template  {
     spec {
-    containers {
-            image = "gcr.io/cloudrun/hello"
+      containers {
+              image = "gcr.io/cloudrun/hello"
+      }
     }
   }
-  }
-  depends_on = [google_project_service.run]
 }
 
 resource "google_cloud_run_service_iam_member" "allUsers" {
@@ -96,19 +72,12 @@ resource "google_cloud_run_service_iam_member" "allUsers" {
 
 #----------------------------------------------------------------------------------------------
 #  Creating Service Account
-#   - Enable API
 #   - Create SA
 #----------------------------------------------------------------------------------------------
-
-resource "google_project_service" "iam" {
-  service = "iam.googleapis.com"
-  disable_on_destroy = false
-}
 
 resource "google_service_account" "sa" {
   account_id = var.service_account_name
   display_name = "A Service Account email to access Google Sheet"
-  depends_on = [google_project_service.iam]
 }
 
 
@@ -120,30 +89,15 @@ data "google_project" "project" {
 }
 
 resource "google_project_iam_binding" "binding" {
+  project = var.project_name
   members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
   role = "roles/run.admin"
-  depends_on = [google_project_service.build]
 }
 
 resource "google_project_iam_binding" "sa" {
+  project = var.project_name
   members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
   role = "roles/iam.serviceAccountUser"
-  depends_on = [google_project_service.build]
-}
-
-
-#----------------------------------------------------------------------------------------------
-#  Enabling APIs for Sheet and Drive
-#----------------------------------------------------------------------------------------------
-
-resource "google_project_service" "sheet" {
-  service = "sheets.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "drive" {
-  service = "drive.googleapis.com"
-  disable_on_destroy = false
 }
 
 
