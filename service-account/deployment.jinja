@@ -5,25 +5,25 @@
 {% set projectName = domain[0] %}
 {% endif %}
 {% set roles = properties['roles'] %}
-{% set sa-identifier = projectName ~ '-sa' %}
+{% set saIdentifier = projectName ~ '-sa' %}
 
 resources:
-- name: {{ sa-identifier }}
+- name: {{ saIdentifier }}
   type: iam.v1.serviceAccount
   properties:
-    accountId: {{ sa-identifier }}
-    displayName: {{ sa-identifier }}
+    accountId: {{ saIdentifier }}
+    displayName: {{ saIdentifier }}
 {% for role in roles %}
 - name: bind-iam-policy-{{ loop.index }}
   type: gcp-types/cloudresourcemanager-v1:virtual.projects.iamMemberBinding
   properties:
     resource: {{ projectName }}
     role: {{ role }}
-    member: serviceAccount:$(ref.{{ sa-identifier }}.email)
+    member: serviceAccount:$(ref.{{ saIdentifier }}.email)
 {% endfor %}
 
 outputs:
 - name: name
-  value: $(ref.{{ sa-identifier }}.name)
+  value: $(ref.{{ saIdentifier }}.name)
 - name: serviceAccount
-  value: $(ref.{{ sa-identifier }}.email)
+  value: $(ref.{{ saIdentifier }}.email)
