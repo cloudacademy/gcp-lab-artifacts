@@ -28,7 +28,6 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
 
   filename = "cloudbuild.yaml"
   substitutions = {
-    _SERVICE_ACCOUNT_EMAIL = google_service_account.sa.email
     _SERVICE_NAME= var.service_name
     _REGION = var.region
   }
@@ -37,11 +36,14 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
 }
 
 #----------------------------------------------------------------------------------------------
-#  CLOUD REGISTRY
-#      - Create Repository
+#  CONTAINER REGISTRY
+#      - Create Registry
 #----------------------------------------------------------------------------------------------
 
-
+resource "google_container_registry" "registry" {
+  project  = var.project_name
+  location = var.region
+}
 
 #----------------------------------------------------------------------------------------------
 #  CLOUD RUN
@@ -67,17 +69,6 @@ resource "google_cloud_run_service_iam_member" "allUsers" {
   location = google_cloud_run_service.my-service.location
   role     = "roles/run.invoker"
   member   = "allUsers"
-}
-
-
-#----------------------------------------------------------------------------------------------
-#  Creating Service Account
-#   - Create SA
-#----------------------------------------------------------------------------------------------
-
-resource "google_service_account" "sa" {
-  account_id = var.service_account_name
-  display_name = "A Service Account email to access Google Sheet"
 }
 
 
