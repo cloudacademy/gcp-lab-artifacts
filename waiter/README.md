@@ -6,3 +6,5 @@
     gcloud beta runtime-config configs variables set \
         success/instance-name instance success --config-name $(ref.waiter.configName)
     ```
+
+- The service account on the instance must be bound to a role with the `runtimeconfig.variables.create` action
