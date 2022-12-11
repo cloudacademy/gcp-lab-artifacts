@@ -1,4 +1,5 @@
-{% set roleId = "labcustomrole_" + (env["current_time"]|string()) %}
+{% set roleIdPrefix = properties['roleIdPrefix'] or 'labcustomrole' %}
+{% set roleId = roleIdPrefix ~ '_' + (env["current_time"]|string()) %}
 {% set name = properties['name'] or 'lab-custom-role' %}
 {% set title = properties['title'] or 'LabCustomRole' %}
 
