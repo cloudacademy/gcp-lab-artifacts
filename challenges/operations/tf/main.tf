@@ -42,7 +42,7 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
 
 resource "google_container_registry" "registry" {
   project  = var.project_name
-  location = var.region
+  location = "us"
 }
 
 #----------------------------------------------------------------------------------------------
