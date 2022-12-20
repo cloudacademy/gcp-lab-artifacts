@@ -38,7 +38,7 @@ variable "repository_name" {
 variable "image_name" {
   description = "The name of the image to deploy. Defaults to a publically available image."
   type        = string
-  default     = "gcr.io/cloudrun/hello"
+  default     = "gcr.io/cloudacademy-labs-support/ops-app"
 }
 
 variable "service_account_name" {
