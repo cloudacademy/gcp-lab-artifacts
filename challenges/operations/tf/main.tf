@@ -58,7 +58,7 @@ resource "google_cloud_run_service" "my-service" {
   template  {
     spec {
       containers {
-              image = "gcr.io/cloudrun/hello"
+              image = "gcr.io/cloudacademy-labs-support/ops-app"
       }
     }
   }
