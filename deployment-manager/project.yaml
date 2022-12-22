@@ -1,0 +1,10 @@
+imports:
+- path: project-id.jinja
+
+resources:
+- name: proj
+  type: project-id.jinja
+
+outputs:
+- name: projectId
+  value: $(ref.proj.projectId)
