@@ -14,19 +14,25 @@
 
 info:
   title: RuntimeConfig resource with Waiter
-  author: Google Inc.
+  author: Google Inc., Cloud Academy
   description: Creates a Waiter that waits for either a single success or a single failure
     signal from an associated VM instance.
 
 required:
+- configName
 - instanceName
 
 properties:
+  configName:
+    type: string
+    description: Name of the runtime configurator config
+
   instanceName:
     type: string
     description: Name of the compute instance that will be signaling the waiter.
 
-outputs:
-  configName:
-    type: string
-    description: Name of the generated RuntimeConfig resource.
+  outputs:
+    type: array
+    description: An (optional) array of names of output variables expected to be set with text values by the instance
+    items:
+      type: string

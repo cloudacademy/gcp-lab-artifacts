@@ -20,9 +20,10 @@
 # For more information, see
 # https://cloud.google.com/deployment-manager/runtime-configurator/
 
-{% set configName = env["deployment"] + "-startup-config" %}
-{% set waiterName = env["deployment"] + "-startup-waiter" %}
+{% set configName = properties["configName"] %}
+{% set waiterName = properties["configName"] + "-waiter" %}
 {% set timeout = properties["timeout"] or "300s" %}
+{% set outputs = properties["outputs"] %}
 
 resources:
 - type: runtimeconfig.v1beta1.config
@@ -73,6 +74,21 @@ resources:
         path: /failure
         number: 1
 
+{% for output in outputs %}
+# This stores the output reported back by VM startup script.
+# Note that it must depend on the waiter.
+- type: runtimeconfig.v1beta1.variable
+  name: {{ output }}
+  properties:
+    parent: $(ref.{{ configName }}.name)
+    variable: {{ output }}
+  metadata:
+    dependsOn:
+    - {{ waiterName }}
+{% endfor %}
+
 outputs:
-- name: configName
-  value: {{ configName }}
+{% for output in outputs %}
+- name: {{ output }}
+  value: $(ref.{{ output }}.text)
+{% endfor %}
