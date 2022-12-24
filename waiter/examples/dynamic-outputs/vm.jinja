@@ -39,11 +39,11 @@ resources:
             set -x
 
             # Signal back to deployment manager template the hostname of this VM.
-            gcloud beta runtime-config configs variables set hostname "$HOSTNAME" \
+            gcloud beta runtime-config configs variables set outputs/hostname "$HOSTNAME" \
             --config-name {{ configName }} --is-text
 
             # Signal back to deployment manager template another variable.
-            gcloud beta runtime-config configs variables set another "This is another output" \
+            gcloud beta runtime-config configs variables set outputs/another "This is another output" \
             --config-name {{ configName }} --is-text
 
             # Report successful configuration of the instance so the deployment terminates

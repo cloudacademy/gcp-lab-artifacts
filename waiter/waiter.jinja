@@ -81,7 +81,7 @@ resources:
   name: {{ output }}
   properties:
     parent: $(ref.{{ configName }}.name)
-    variable: {{ output }}
+    variable: outputs/{{ output }}
   metadata:
     dependsOn:
     - {{ waiterName }}
