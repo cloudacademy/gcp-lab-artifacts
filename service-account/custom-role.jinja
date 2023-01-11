@@ -1,13 +1,16 @@
-{% set roleId = "labcustomrole_" + (env["current_time"]|string()) %}
+{% set roleIdPrefix = properties['roleIdPrefix'] or 'labcustomrole' %}
+{% set roleId = roleIdPrefix ~ '_' + (env["current_time"]|string()) %}
+{% set name = properties['name'] or 'lab-custom-role' %}
+{% set title = properties['title'] or 'LabCustomRole' %}
 
 resources:
-- name: lab-custom-role
+- name: {{ name }}
   type: gcp-types/iam-v1:projects.roles
   properties:
     parent: projects/{{ env["project"] }}
     roleId: {{ roleId }}
     role:
-      title: LabCustomRole
+      title: {{ title }}
       description: Custom role for the lab
       stage: GA
       includedPermissions: {{ properties["includedPermissions"] }}

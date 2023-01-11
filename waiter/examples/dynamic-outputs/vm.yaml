@@ -1,0 +1,27 @@
+imports:
+- path: vm.jinja
+  name: vm.jinja
+- path: ../../waiter.jinja
+  name: waiter.jinja
+
+resources:
+- name: cavm
+  type: vm.jinja
+  properties:
+    name: cavm
+
+- name: init-waiter
+  type: waiter.jinja
+  properties:
+    configName: lab-config
+    instanceName: cavm
+    timeout: 300s
+    outputs: 
+    - hostname
+    - another
+
+outputs:
+- name: hostname
+  value: $(ref.init-waiter.hostname)
+- name: another
+  value: $(ref.init-waiter.another)

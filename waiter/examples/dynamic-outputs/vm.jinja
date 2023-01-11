@@ -1,0 +1,51 @@
+{% set vmName       = properties["name"] %}
+{% set zone         = "us-central1-a" %}
+{% set machineType  = "n1-standard-1" %}
+
+{% set configName   = "lab-config" %}
+
+resources:
+
+- name: {{ vmName }}
+  type: compute.v1.instance
+  properties:
+    zone: {{ zone }}
+    machineType: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/zones/{{ zone }}/machineTypes/{{ machineType }}
+    tags:
+      items:
+      - neo4j
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/family/debian-10
+    networkInterfaces:
+    - network: global/networks/default
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    serviceAccounts:
+    - email: default
+      scopes:
+        - https://www.googleapis.com/auth/cloudruntimeconfig
+        - https://www.googleapis.com/auth/logging.write
+    metadata:
+      items:
+        - key: startup-script
+          value: |
+            #!/bin/bash
+            set -x
+
+            # Signal back to deployment manager template the hostname of this VM.
+            gcloud beta runtime-config configs variables set outputs/hostname "$HOSTNAME" \
+            --config-name {{ configName }} --is-text
+
+            # Signal back to deployment manager template another variable.
+            gcloud beta runtime-config configs variables set outputs/another "This is another output" \
+            --config-name {{ configName }} --is-text
+
+            # Report successful configuration of the instance so the deployment terminates
+            gcloud beta runtime-config configs variables set success/success \
+            "success" --config-name {{ configName }}
