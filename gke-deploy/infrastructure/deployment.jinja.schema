@@ -33,7 +33,7 @@ properties:
   k8sVersion:
     type: string
     description: Initial Kubernetes version running on the nodes.
-    default: '1.26'
+    default: '1.27'
   machineType:
     type: string
     description: Machine Type of cluster nodes.
