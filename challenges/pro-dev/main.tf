@@ -113,6 +113,6 @@ resource "google_project_iam_binding" "gkebinding" {
 #  Creating Local for image name
 #----------------------------------------------------------------------------------------------
 
-locals {
-  image_name = var.image_name == "" ? "${var.region}/gcr.io/${var.project_name}/${var.service_name}" : var.image_name
-}
+# locals {
+#   image_name = var.image_name == "" ? "${var.region}/gcr.io/${var.project_name}/${var.service_name}" : var.image_name
+# }
