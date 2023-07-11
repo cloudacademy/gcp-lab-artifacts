@@ -9,7 +9,7 @@ provider "google" {
 #      - Create Repository
 #----------------------------------------------------------------------------------------------
 
-resource "google_sourcerepo_repository" "repo" {
+resource "google_sourcerepo_repository" "api_repo" {
   name = var.api_repository_name
 }
 
@@ -35,7 +35,7 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
     _CLUSTER      = "lab-cluster"
   }
 
-  depends_on = [google_sourcerepo_repository.repo]
+  depends_on = [google_sourcerepo_repository.api_repo]
 }
 
 #----------------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
 #      - Create Registry
 #----------------------------------------------------------------------------------------------
 
-resource "google_artifact_registry_repository" "my-repo" {
+resource "google_artifact_registry_repository" "app-repo" {
   location      = "us-central1"
   repository_id = "var.app_name"
   description   = "Docker repository for app images"
