@@ -102,7 +102,7 @@ resource "google_project_iam_binding" "sa" {
   role    = "roles/iam.serviceAccountUser"
 }
 
-resource "google_project_iam_binding" "sa" {
+resource "google_project_iam_binding" "gkebinding" {
   project = var.project_name
   members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
   role    = "roles/container.developer"
