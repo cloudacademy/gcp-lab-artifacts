@@ -45,7 +45,7 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
 
 resource "google_artifact_registry_repository" "app-repo" {
   location      = "us-central1"
-  repository_id = "var.app_name"
+  repository_id = var.app_name
   description   = "Docker repository for app images"
   format        = "DOCKER"
 }
