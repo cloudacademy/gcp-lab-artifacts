@@ -60,7 +60,7 @@ variable "upvote_repository_name" {
   default     = "upvote-app"
 }
 
-variable "upvote_function_service_name" {
+variable "votes_function_service_name" {
   description = "The name of the votes function service to deploy."
   type        = string
   default     = "votes"
