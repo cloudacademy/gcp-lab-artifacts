@@ -107,8 +107,6 @@ resource "google_cloudbuild_trigger" "votes_function_cloud_build_trigger" {
     _REPOSITORY     = var.app_name
     _SERVICE_NAME   = var.votes_function_service_name
     _REGION         = var.region
-    _VOTES_INSTANCE = "vote-instance"
-    _VOTES_DATABASE = "votes"
   }
 
   depends_on = [google_sourcerepo_repository.votes_function_repo]
@@ -127,8 +125,6 @@ resource "google_cloudbuild_trigger" "upvote_function_cloud_build_trigger" {
     _REPOSITORY   = var.app_name
     _SERVICE_NAME = var.upvote_function_service_name
     _REGION       = var.region
-    _VOTES_INSTANCE = "vote-instance"
-    _VOTES_DATABASE = "votes"
   }
 
   depends_on = [google_sourcerepo_repository.upvote_function_repo]
