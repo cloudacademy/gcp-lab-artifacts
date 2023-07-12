@@ -12,7 +12,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /
+          - path: /tally
             pathType: Prefix
             backend:
               service:
@@ -25,4 +25,4 @@ spec:
               service:
                 name: upvote-app
                 port:
-                  number: 3001
+                  number: 3000
