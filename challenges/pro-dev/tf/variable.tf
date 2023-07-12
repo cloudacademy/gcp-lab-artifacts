@@ -25,7 +25,7 @@ variable "branch_name" {
 }
 
 variable "api_service_name" {
-  description = "The name of the Cloud Run service to deploy."
+  description = "The name of the votes API service to deploy."
   type        = string
   default     = "votes-api"
 }
@@ -36,8 +36,50 @@ variable "api_repository_name" {
   default     = "votes-api"
 }
 
-variable "image_name" {
-  description = "The name of the image to deploy. Defaults to a publically available image."
+variable "votes_service_name" {
+  description = "The name of the votes app service to deploy."
   type        = string
-  default     = "gcr.io/cloudacademy-labs-support/ops-app"
+  default     = "votes-app"
+}
+
+variable "votes_repository_name" {
+  description = "Name of the Google Cloud Source Repository to create."
+  type        = string
+  default     = "votes-app"
+}
+
+variable "upvote_service_name" {
+  description = "The name of the vote app service to deploy."
+  type        = string
+  default     = "upvote-app"
+}
+
+variable "upvote_repository_name" {
+  description = "Name of the Google Cloud Source Repository to create."
+  type        = string
+  default     = "upvote-app"
+}
+
+variable "upvote_function_service_name" {
+  description = "The name of the votes function service to deploy."
+  type        = string
+  default     = "votes"
+}
+
+variable "votes_function_repository_name" {
+  description = "Name of the Google Cloud Source Repository to create."
+  type        = string
+  default     = "votes-function"
+}
+
+variable "upvote_function_service_name" {
+  description = "The name of the vote function service to deploy."
+  type        = string
+  default     = "upvote"
+}
+
+variable "upvote_function_repository_name" {
+  description = "Name of the Google Cloud Source Repository to create."
+  type        = string
+  default     = "upvote-function"
 }

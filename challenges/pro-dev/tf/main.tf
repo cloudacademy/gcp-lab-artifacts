@@ -6,19 +6,35 @@ provider "google" {
 
 #----------------------------------------------------------------------------------------------
 #  CLOUD SOURCE REPOSITORY
-#      - Create Repository
+#      - Create Repositories
 #----------------------------------------------------------------------------------------------
 
 resource "google_sourcerepo_repository" "api_repo" {
   name = var.api_repository_name
 }
 
+resource "google_sourcerepo_repository" "votes_repo" {
+  name = var.votes_repository_name
+}
+
+resource "google_sourcerepo_repository" "upvote_repo" {
+  name = var.upvote_repository_name
+}
+
+resource "google_sourcerepo_repository" "votes_function_repo" {
+  name = var.votes_function_repository_name
+}
+
+resource "google_sourcerepo_repository" "upvote_function_repo" {
+  name = var.upvote_function_repository_name
+}
+
 #----------------------------------------------------------------------------------------------
 #  CLOUD BUILD
-#      - Create Build Trigger
+#      - Create Build Triggers
 #----------------------------------------------------------------------------------------------
 
-resource "google_cloudbuild_trigger" "cloud_build_trigger" {
+resource "google_cloudbuild_trigger" "api_cloud_build_trigger" {
   name        = var.api_repository_name
   description = "Cloud Source Repository Trigger ${var.api_repository_name}"
   trigger_template {
@@ -36,6 +52,86 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
   }
 
   depends_on = [google_sourcerepo_repository.api_repo]
+}
+
+resource "google_cloudbuild_trigger" "votes_cloud_build_trigger" {
+  name        = var.votes_repository_name
+  description = "Cloud Source Repository Trigger ${var.votes_repository_name}"
+  trigger_template {
+    repo_name   = var.votes_repository_name
+    branch_name = var.branch_name
+  }
+
+  filename = "cloudbuild.yaml"
+  substitutions = {
+    _REPOSITORY   = var.app_name
+    _SERVICE_NAME = var.votes_service_name
+    _REGION       = var.region
+    _ZONE         = "us-central1-b"
+    _CLUSTER      = "lab-cluster"
+  }
+
+  depends_on = [google_sourcerepo_repository.votes_repo]
+}
+
+resource "google_cloudbuild_trigger" "upvote_cloud_build_trigger" {
+  name        = var.upvote_repository_name
+  description = "Cloud Source Repository Trigger ${var.upvote_repository_name}"
+  trigger_template {
+    repo_name   = var.upvote_repository_name
+    branch_name = var.branch_name
+  }
+
+  filename = "cloudbuild.yaml"
+  substitutions = {
+    _REPOSITORY   = var.app_name
+    _SERVICE_NAME = var.upvote_service_name
+    _REGION       = var.region
+    _ZONE         = "us-central1-b"
+    _CLUSTER      = "lab-cluster"
+  }
+
+  depends_on = [google_sourcerepo_repository.upvote_repo]
+}
+
+resource "google_cloudbuild_trigger" "votes_function_cloud_build_trigger" {
+  name        = var.votes_function_repository_name
+  description = "Cloud Source Repository Trigger ${var.votes_function_repository_name}"
+  trigger_template {
+    repo_name   = var.votes_function_repository_name
+    branch_name = var.branch_name
+  }
+
+  filename = "cloudbuild.yaml"
+  substitutions = {
+    _REPOSITORY     = var.app_name
+    _SERVICE_NAME   = var.votes_function_service_name
+    _REGION         = var.region
+    _VOTES_INSTANCE = "vote-instance"
+    _VOTES_DATABASE = "votes"
+  }
+
+  depends_on = [google_sourcerepo_repository.votes_function_repo]
+}
+
+resource "google_cloudbuild_trigger" "upvote_function_cloud_build_trigger" {
+  name        = var.upvote_repository_name
+  description = "Cloud Source Repository Trigger ${var.upvote_function_repository_name}"
+  trigger_template {
+    repo_name   = var.upvote_function_repository_name
+    branch_name = var.branch_name
+  }
+
+  filename = "cloudbuild.yaml"
+  substitutions = {
+    _REPOSITORY   = var.app_name
+    _SERVICE_NAME = var.upvote_function_service_name
+    _REGION       = var.region
+    _VOTES_INSTANCE = "vote-instance"
+    _VOTES_DATABASE = "votes"
+  }
+
+  depends_on = [google_sourcerepo_repository.upvote_function_repo]
 }
 
 #----------------------------------------------------------------------------------------------
@@ -107,12 +203,3 @@ resource "google_project_iam_binding" "gkebinding" {
   members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
   role    = "roles/container.developer"
 }
-
-
-#----------------------------------------------------------------------------------------------
-#  Creating Local for image name
-#----------------------------------------------------------------------------------------------
-
-# locals {
-#   image_name = var.image_name == "" ? "${var.region}/gcr.io/${var.project_name}/${var.service_name}" : var.image_name
-# }
