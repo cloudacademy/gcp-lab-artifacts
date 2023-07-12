@@ -9,3 +9,20 @@ spec:
       name: votes-api
       port:
         number: 3333
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: votes-app
+                port:
+                  number: 3001
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: upvote-app
+                port:
+                  number: 3001
