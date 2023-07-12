@@ -1,0 +1,18 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: votes-app
+  labels:
+    name: votes-app
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: votes-api-ingress
+  namespace: votes-app
+spec:
+  defaultBackend:
+    service:
+      name: votes-api
+      port:
+        number: 3333

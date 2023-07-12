@@ -115,7 +115,7 @@ resource "google_cloudbuild_trigger" "votes_function_cloud_build_trigger" {
 }
 
 resource "google_cloudbuild_trigger" "upvote_function_cloud_build_trigger" {
-  name        = var.upvote_repository_name
+  name        = var.upvote_function_repository_name
   description = "Cloud Source Repository Trigger ${var.upvote_function_repository_name}"
   trigger_template {
     repo_name   = var.upvote_function_repository_name
