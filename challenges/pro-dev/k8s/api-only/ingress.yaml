@@ -11,8 +11,20 @@ metadata:
   name: votes-app-ingress
   namespace: votes-app
 spec:
-  defaultBackend:
-    service:
-      name: votes-api
-      port:
-        number: 3333
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: votes-api
+            port:
+              number: 3333
+        path: /votes
+        pathType: Exact
+      - backend:
+          service:
+            name: votes-api
+            port:
+              number: 3333
+        path: /vote
+        pathType: Exact

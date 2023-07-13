@@ -13,23 +13,30 @@ metadata:
 spec:
   defaultBackend:
     service:
-      name: votes-api
+      name: upvote-app
       port:
-        number: 3333
+        number: 3000
   rules:
-    - http:
-        paths:
-          - path: /tally
-            pathType: Prefix
-            backend:
-              service:
-                name: votes-app
-                port:
-                  number: 3001
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: upvote-app
-                port:
-                  number: 3000
+  - http:
+      paths:
+      - backend:
+          service:
+            name: votes-app
+            port:
+              number: 3001
+        path: /tally
+        pathType: Prefix
+      - backend:
+          service:
+            name: votes-api
+            port:
+              number: 3333
+        path: /votes
+        pathType: Exact
+      - backend:
+          service:
+            name: votes-api
+            port:
+              number: 3333
+        path: /vote
+        pathType: Exact
