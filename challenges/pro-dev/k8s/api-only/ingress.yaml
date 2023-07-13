@@ -8,7 +8,7 @@ metadata:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: votes-api-ingress
+  name: votes-app-ingress
   namespace: votes-app
 spec:
   defaultBackend:
