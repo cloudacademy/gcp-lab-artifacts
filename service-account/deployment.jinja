@@ -6,7 +6,7 @@
 {% endif %}
 {% set roles = properties['roles'] %}
 {% set identifierSuffix = properties['identifierSuffix'] or 'sa' %}
-{% set saIdentifier = projectName ~ '-' ~ identifierSuffix %}
+{% set saIdentifier = (projectName ~ '-' ~ identifierSuffix)[:30] %}
 
 resources:
 - name: {{ saIdentifier }}
