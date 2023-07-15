@@ -37,3 +37,11 @@ resources:
         - https://www.googleapis.com/auth/servicecontrol
         - https://www.googleapis.com/auth/service.management.readonly
         - https://www.googleapis.com/auth/trace.append
+        {% if properties["workloadIdentity"] %}
+        workloadMetadataConfig:
+          mode: GKE_METADATA_SERVER
+        {% endif %}
+      {% if properties["workloadIdentity"] %}
+      workloadIdentityConfig:
+        workloadPool: {{ env["project"] }}.svc.id.goog
+      {% endif %}
