@@ -39,7 +39,7 @@ resources:
         - https://www.googleapis.com/auth/trace.append
         {% if properties["workloadIdentity"] %}
         workloadMetadataConfig:
-          mode: GKE_METADATA_SERVER
+          mode: GKE_METADATA
         {% endif %}
       {% if properties["workloadIdentity"] %}
       workloadIdentityConfig:
