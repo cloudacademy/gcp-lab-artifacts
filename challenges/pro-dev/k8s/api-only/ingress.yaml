@@ -1,9 +1,15 @@
-kind: Namespace
 apiVersion: v1
+kind: Namespace
 metadata:
   name: votes-app
   labels:
     name: votes-app
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: votes-api
+  namespace: votes-app
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
