@@ -199,3 +199,9 @@ resource "google_project_iam_binding" "gkebinding" {
   members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
   role    = "roles/container.developer"
 }
+
+resource "google_project_iam_binding" "ingressListBinding" {
+  project = var.project_name
+  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  role    = "roles/compute.networkViewer"
+}
