@@ -86,7 +86,7 @@ resource "google_cloudbuild_trigger" "upvote_cloud_build_trigger" {
   substitutions = {
     _REPOSITORY   = var.app_name
     _SERVICE_NAME = var.upvote_service_name
-    _REGION       = var.region
+    _REGION       = "us-central"
     _ZONE         = "us-central1-b"
     _CLUSTER      = "lab-cluster"
   }
