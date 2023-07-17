@@ -1,0 +1,38 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Votes App Tour",
+  "steps": [
+    {
+      "title": "Introduction",
+      "description": "This workspace includes each of the five Cloud Source Repositories for the voting application:\n1. **upvote-function**: The Cloud Function repository for casting votes\n2. **votes-function**: The Cloud Function repository for counting total votes\n3. **votes-api**: The Node.js API that the frontend apps communicate with to cast or count votes \n4. **votes-app**: The frontend React app users cast votes with\n5. **upvote-app**: The frontend React app that displays the total votes cast",
+      "view": "explorer",
+      "commands": []
+    },
+    {
+      "directory": "upvote-function",
+      "description": "The upvote-function repository is one of the two Cloud Functions created for the votes app. Each include a **cloudbuild.yaml** file controlling the Google Cloud Build steps. Each also includes a **main.py** Python source file. The code for the upvote function casts a vote which adds a row to the Cloud Spanner table. ",
+      "view": "explorer"
+    },
+    {
+      "directory": "votes-function",
+      "description": "The source code for the votes function returns a JSON object that has a votes property which counts the number of rows in the Cloud Spanner table.",
+      "view": "explorer"
+    },
+    {
+      "directory": "votes-api",
+      "description": "The votes-api API service has (as well as the frontend ReactJS apps: upvote-app and votes-app) include a **cloudbuild.yaml** build configuration as well as a **k8s/deploy.yaml** Kuberentes manifest file that declare resources to deploy on the GKE cluster.",
+      "view": "explorer"
+    },
+    {
+      "description": "When you make changes to files, you can commit them to the Cloud Source Repository by clicking the **Source Control** icon in the Activity Bar on the left. You can click **Commit** to commit your changes to the local repository. You can then click **Sync** to push your changes to the remote Cloud Source repository.",
+      "view": "scm"
+    },
+    {
+      "description": "Lastly, if you want to run any `gcloud` or `kubectl` you can use the integrated terminal.\nClick the following command to configure credentials for kubectl to target the GKE cluster:\n>> gcloud container clusters get-credentials lab-cluster --zone us-central1-b --project $(gcloud config get-value project)"
+    },
+    {
+      "description": "You are now free to complete the mission. Good luck!"
+    }
+  ],
+  "isPrimary": true
+}
