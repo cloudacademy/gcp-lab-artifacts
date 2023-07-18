@@ -24,7 +24,7 @@
       "view": "explorer"
     },
     {
-      "description": "When you make changes to files, you can commit them to the Cloud Source Repository by clicking the **Source Control** icon in the Activity Bar on the left. You can click **Commit** to commit your changes to the local repository. You can then click **Sync** to push your changes to the remote Cloud Source repository.",
+      "description": "When you make changes to files, you can commit them to the Cloud Source Repository by clicking the **Source Control** icon in the Activity Bar on the left. You can click **Commit** to commit your changes to the local repository. You can then click **Sync changes** to push your changes to the remote Cloud Source repository.",
       "view": "scm"
     },
     {
