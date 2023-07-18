@@ -4,7 +4,7 @@
   "steps": [
     {
       "title": "Introduction",
-      "description": "This workspace includes each of the five Cloud Source Repositories for the voting application:\n1. **upvote-function**: The Cloud Function repository for casting votes\n2. **votes-function**: The Cloud Function repository for counting total votes\n3. **votes-api**: The Node.js API that the frontend apps communicate with to cast or count votes \n4. **votes-app**: The frontend React app users cast votes with\n5. **upvote-app**: The frontend React app that displays the total votes cast",
+      "description": "This workspace includes each of the five Cloud Source Repositories for the voting application:\n1. **upvote-function**: The Cloud Function repository for casting votes\n2. **votes-function**: The Cloud Function repository for counting total votes\n3. **votes-api**: The Node.js API that the frontend apps communicate with to cast or count votes \n4. **votes-app**: The frontend React app users cast votes with by clicking a button\n5. **upvote-app**: The frontend React app that displays the total votes cast and updates by clicking a button",
       "view": "explorer",
       "commands": []
     },
