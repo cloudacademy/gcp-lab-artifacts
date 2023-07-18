@@ -28,7 +28,7 @@
       "view": "scm"
     },
     {
-      "description": "Lastly, if you want to run any `gcloud` or `kubectl` commands you can use the integrated terminal.\nClick the following command to configure credentials for kubectl to target the GKE cluster:\n>> gcloud container clusters get-credentials lab-cluster --zone us-central1-b --project $(gcloud config get-value project)",
+      "description": "Lastly, if you want to run any `gcloud` or `kubectl` commands you can use the integrated terminal.\nClick the following command to configure credentials for `kubectl` to target the GKE cluster:\n>> gcloud container clusters get-credentials lab-cluster --zone us-central1-b --project $(gcloud config get-value project)",
       "view": "terminal"
     },
     {
