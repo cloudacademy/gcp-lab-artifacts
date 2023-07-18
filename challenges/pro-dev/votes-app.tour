@@ -20,7 +20,7 @@
     },
     {
       "directory": "votes-api",
-      "description": "The votes-api API service has (as well as the frontend ReactJS apps: upvote-app and votes-app) include a **cloudbuild.yaml** build configuration as well as a **k8s/deploy.yaml** Kuberentes manifest file that declare resources to deploy on the GKE cluster.",
+      "description": "The votes-api API service (as well as the frontend ReactJS apps: upvote-app and votes-app) includes a **cloudbuild.yaml** build configuration and a **k8s/deploy.yaml** Kuberentes manifest file that declare resources to deploy on the GKE cluster.",
       "view": "explorer"
     },
     {
