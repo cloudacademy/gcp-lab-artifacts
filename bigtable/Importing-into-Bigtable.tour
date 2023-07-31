@@ -1,0 +1,147 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Importing Data Into Bigtable Tour",
+  "steps": [
+    {
+      "directory": "streaming",
+      "description": "This the `streaming` directory of this repository contains the code for:\n1. Simulating sensor data that is published to Pub/Sub (the **publish** subdirectory), and \n2. Processing the data in Pub/Sub with Dataflow to import the data into Cloud Bigtable. (**process* subdirectory)",
+      "title": "Introduction"
+    },
+    {
+      "file": "streaming/publish/send_sensor_data.py",
+      "selection": {
+        "start": {
+          "line": 28,
+          "character": 1
+        },
+        "end": {
+          "line": 33,
+          "character": 45
+        }
+      },
+      "description": "A review of the entire code is out of scope for this lab. To summarize the **publish** code, batches of sensor readings are generated periodically and published to Pub/Sub using the Google Cloud Pub/Sub API client library.",
+      "title": "Publish Readings to Pub/Sub"
+    },
+    {
+      "file": "streaming/process/sandiego/src/main/java/com/google/cloud/training/dataanalyst/sandiego/CurrentConditions.java",
+      "selection": {
+        "start": {
+          "line": 22,
+          "character": 1
+        },
+        "end": {
+          "line": 31,
+          "character": 47
+        }
+      },
+      "description": "The Java code that uses Apache Beam, which Dataflow is based on, in the **process** subdirectory,  The **CurrenConditions.java** file contains the high-level flow of the Dataflow streaming job.",
+      "title": "Apache Beam"
+    },
+    {
+      "file": "streaming/process/sandiego/src/main/java/com/google/cloud/training/dataanalyst/sandiego/CurrentConditions.java",
+      "selection": {
+        "start": {
+          "line": 74,
+          "character": 1
+        },
+        "end": {
+          "line": 86,
+          "character": 6
+        }
+      },
+      "description": "An Apache Beam Pipeline describes the flow of the data for Dataflow to process.",
+      "title": "Dataflow Pipeline"
+    },
+    {
+      "file": "streaming/process/sandiego/src/main/java/com/google/cloud/training/dataanalyst/sandiego/CurrentConditions.java",
+      "selection": {
+        "start": {
+          "line": 75,
+          "character": 9
+        },
+        "end": {
+          "line": 75,
+          "character": 74
+        }
+      },
+      "description": "First, messages are read from the Pub/Sub topic.",
+      "title": "GetMessages"
+    },
+    {
+      "file": "streaming/process/sandiego/src/main/java/com/google/cloud/training/dataanalyst/sandiego/CurrentConditions.java",
+      "selection": {
+        "start": {
+          "line": 76,
+          "character": 9
+        },
+        "end": {
+          "line": 82,
+          "character": 13
+        }
+      },
+      "description": "Second, the raw messages are processed into LaneInfo objects that can be written to the output table.",
+      "title": "ExtractData"
+    },
+    {
+      "file": "streaming/process/sandiego/src/main/java/com/google/cloud/training/dataanalyst/sandiego/CurrentConditions.java",
+      "selection": {
+        "start": {
+          "line": 85,
+          "character": 7
+        },
+        "end": {
+          "line": 85,
+          "character": 66
+        }
+      },
+      "description": "Lastly, the LaneInfo data is written to Bigtable.",
+      "title": "writeToBigtable"
+    },
+    {
+      "file": "streaming/process/sandiego/src/main/java/com/google/cloud/training/dataanalyst/sandiego/BigtableHelper.java",
+      "selection": {
+        "start": {
+          "line": 72,
+          "character": 5
+        },
+        "end": {
+          "line": 73,
+          "character": 95
+        }
+      },
+      "description": "A pipeline step named **write:cbt** mutates the `laneInfo` data into Cloud Bigtable.",
+      "title": "write:cbt"
+    },
+    {
+      "file": "streaming/process/sandiego/src/main/java/com/google/cloud/training/dataanalyst/sandiego/BigtableHelper.java",
+      "selection": {
+        "start": {
+          "line": 111,
+          "character": 9
+        },
+        "end": {
+          "line": 115,
+          "character": 77
+        }
+      },
+      "description": "The Bigtable table key consists of the highway, direction, lane, and timestamp.",
+      "title": "Table key"
+    },
+    {
+      "file": "streaming/process/sandiego/src/main/java/com/google/cloud/training/dataanalyst/sandiego/BigtableHelper.java",
+      "selection": {
+        "start": {
+          "line": 117,
+          "character": 9
+        },
+        "end": {
+          "line": 127,
+          "character": 66
+        }
+      },
+      "description": "The mutation writes all data into a single Bigtable column family.\n\nThis concludes the tour.",
+      "title": "Columns"
+    }
+  ],
+  "isPrimary": true
+}
