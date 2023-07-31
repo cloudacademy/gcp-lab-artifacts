@@ -4,7 +4,7 @@
   "steps": [
     {
       "directory": "streaming",
-      "description": "This the `streaming` directory of this repository contains the code for:\n1. Simulating sensor data that is published to Pub/Sub (the **publish** subdirectory), and \n2. Processing the data in Pub/Sub with Dataflow to import the data into Cloud Bigtable. (**process* subdirectory)",
+      "description": "The `streaming` directory of this repository contains the code for:\n1. Simulating sensor data that is published to Pub/Sub (the **publish** subdirectory), and \n2. Processing the data in Pub/Sub with Dataflow to import the data into Cloud Bigtable. (**process* subdirectory)",
       "title": "Introduction"
     },
     {
