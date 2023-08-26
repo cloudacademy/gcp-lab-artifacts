@@ -7,13 +7,14 @@
 {% set roles = properties['roles'] %}
 {% set identifierSuffix = properties['identifierSuffix'] or 'sa' %}
 {% set saIdentifier = (projectName ~ '-' ~ identifierSuffix)[:30] %}
+{% set displayName = properties['displayName'] or saIdentifier %}
 
 resources:
 - name: {{ saIdentifier }}
   type: iam.v1.serviceAccount
   properties:
     accountId: {{ saIdentifier }}
-    displayName: {{ saIdentifier }}
+    displayName: {{ displayName }}
 {% for role in roles %}
 - name: bind-iam-policy-{{ identifierSuffix }}-{{ loop.index }}
   type: gcp-types/cloudresourcemanager-v1:virtual.projects.iamMemberBinding
