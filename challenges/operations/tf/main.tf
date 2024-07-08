@@ -18,31 +18,31 @@ resource "google_sourcerepo_repository" "repo" {
 #      - Create Build Trigger
 #----------------------------------------------------------------------------------------------
 
-resource "google_cloudbuild_trigger" "cloud_build_trigger" {
+resource "google_cloudbuild_trigger" "trigger" {
   name = var.repository_name
-  description = "Cloud Source Repository Trigger ${var.repository_name}"
   trigger_template {
     repo_name = var.repository_name
     branch_name = var.branch_name
   }
-
+  service_account = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   filename = "cloudbuild.yaml"
   substitutions = {
     _SERVICE_NAME= var.service_name
     _REGION = var.region
+    _BUCKET_NAME = var.bucket_name
+    _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   }
-
-  depends_on = [google_sourcerepo_repository.repo]
 }
 
 #----------------------------------------------------------------------------------------------
-#  CONTAINER REGISTRY
+#  ARTIFACT REGISTRY
 #      - Create Registry
 #----------------------------------------------------------------------------------------------
 
-resource "google_container_registry" "registry" {
-  project  = var.project_name
-  location = "us"
+resource "google_artifact_registry_repository" "repo" {
+  location      = "us-central1"
+  repository_id = var.repository_name
+  format        = "DOCKER"
 }
 
 #----------------------------------------------------------------------------------------------
@@ -70,27 +70,6 @@ resource "google_cloud_run_service_iam_member" "allUsers" {
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
-
-
-#----------------------------------------------------------------------------------------------
-#  Grant Cloud Build Permission
-#----------------------------------------------------------------------------------------------
-
-data "google_project" "project" {
-}
-
-resource "google_project_iam_binding" "binding" {
-  project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
-  role = "roles/run.admin"
-}
-
-resource "google_project_iam_binding" "sa" {
-  project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
-  role = "roles/iam.serviceAccountUser"
-}
-
 
 #----------------------------------------------------------------------------------------------
 #  Creating Local for image name
