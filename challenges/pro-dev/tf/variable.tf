@@ -1,5 +1,5 @@
 variable "project_name" {
-   description = "The project ID where all resources will be launched."
+  description = "The project ID where all resources will be launched."
   type = string
 }
 
@@ -17,6 +17,11 @@ variable "app_name" {
   description = "Name of the app."
   type        = string
   default     = "votes-app"
+}
+
+variable "bucket_name" {
+  description = "The name of the logs bucket."
+  type        = string
 }
 
 variable "branch_name" {

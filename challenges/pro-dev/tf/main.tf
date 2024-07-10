@@ -49,6 +49,7 @@ resource "google_cloudbuild_trigger" "api_cloud_build_trigger" {
     _REGION       = var.region
     _ZONE         = "us-central1-b"
     _CLUSTER      = "lab-cluster"
+    _BUCKET_NAME  = var.bucket_name
     _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   }
 
@@ -70,6 +71,7 @@ resource "google_cloudbuild_trigger" "votes_cloud_build_trigger" {
     _REGION       = var.region
     _ZONE         = "us-central1-b"
     _CLUSTER      = "lab-cluster"
+    _BUCKET_NAME  = var.bucket_name
     _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   }
 
@@ -91,6 +93,7 @@ resource "google_cloudbuild_trigger" "upvote_cloud_build_trigger" {
     _REGION       = "us-central"
     _ZONE         = "us-central1-b"
     _CLUSTER      = "lab-cluster"
+    _BUCKET_NAME  = var.bucket_name
     _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   }
 
@@ -110,6 +113,7 @@ resource "google_cloudbuild_trigger" "votes_function_cloud_build_trigger" {
     _REPOSITORY     = var.app_name
     _SERVICE_NAME   = var.votes_function_service_name
     _REGION         = var.region
+    _BUCKET_NAME    = var.bucket_name
     _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   }
 
@@ -129,6 +133,7 @@ resource "google_cloudbuild_trigger" "upvote_function_cloud_build_trigger" {
     _REPOSITORY   = var.app_name
     _SERVICE_NAME = var.upvote_function_service_name
     _REGION       = var.region
+    _BUCKET_NAME  = var.bucket_name
     _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   }
 
