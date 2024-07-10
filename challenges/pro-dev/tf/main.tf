@@ -41,7 +41,7 @@ resource "google_cloudbuild_trigger" "api_cloud_build_trigger" {
     repo_name   = var.api_repository_name
     branch_name = var.branch_name
   }
-
+  service_account = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   filename = "cloudbuild.yaml"
   substitutions = {
     _REPOSITORY   = var.app_name
@@ -49,6 +49,7 @@ resource "google_cloudbuild_trigger" "api_cloud_build_trigger" {
     _REGION       = var.region
     _ZONE         = "us-central1-b"
     _CLUSTER      = "lab-cluster"
+    _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   }
 
   depends_on = [google_sourcerepo_repository.api_repo]
@@ -61,7 +62,7 @@ resource "google_cloudbuild_trigger" "votes_cloud_build_trigger" {
     repo_name   = var.votes_repository_name
     branch_name = var.branch_name
   }
-
+service_account = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   filename = "cloudbuild.yaml"
   substitutions = {
     _REPOSITORY   = var.app_name
@@ -69,6 +70,7 @@ resource "google_cloudbuild_trigger" "votes_cloud_build_trigger" {
     _REGION       = var.region
     _ZONE         = "us-central1-b"
     _CLUSTER      = "lab-cluster"
+    _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   }
 
   depends_on = [google_sourcerepo_repository.votes_repo]
@@ -81,7 +83,7 @@ resource "google_cloudbuild_trigger" "upvote_cloud_build_trigger" {
     repo_name   = var.upvote_repository_name
     branch_name = var.branch_name
   }
-
+service_account = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   filename = "cloudbuild.yaml"
   substitutions = {
     _REPOSITORY   = var.app_name
@@ -89,6 +91,7 @@ resource "google_cloudbuild_trigger" "upvote_cloud_build_trigger" {
     _REGION       = "us-central"
     _ZONE         = "us-central1-b"
     _CLUSTER      = "lab-cluster"
+    _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   }
 
   depends_on = [google_sourcerepo_repository.upvote_repo]
@@ -101,12 +104,13 @@ resource "google_cloudbuild_trigger" "votes_function_cloud_build_trigger" {
     repo_name   = var.votes_function_repository_name
     branch_name = var.branch_name
   }
-
+service_account = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   filename = "cloudbuild.yaml"
   substitutions = {
     _REPOSITORY     = var.app_name
     _SERVICE_NAME   = var.votes_function_service_name
     _REGION         = var.region
+    _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   }
 
   depends_on = [google_sourcerepo_repository.votes_function_repo]
@@ -119,12 +123,13 @@ resource "google_cloudbuild_trigger" "upvote_function_cloud_build_trigger" {
     repo_name   = var.upvote_function_repository_name
     branch_name = var.branch_name
   }
-
+service_account = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   filename = "cloudbuild.yaml"
   substitutions = {
     _REPOSITORY   = var.app_name
     _SERVICE_NAME = var.upvote_function_service_name
     _REGION       = var.region
+    _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
   }
 
   depends_on = [google_sourcerepo_repository.upvote_function_repo]
