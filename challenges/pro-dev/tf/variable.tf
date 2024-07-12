@@ -24,6 +24,11 @@ variable "branch_name" {
     default = "master"
 }
 
+variable "bucket_name" {
+  description = "The name of the logs bucket."
+  type        = string
+}
+
 variable "api_service_name" {
   description = "The name of the votes API service to deploy."
   type        = string
