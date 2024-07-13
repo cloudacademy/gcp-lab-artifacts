@@ -75,9 +75,10 @@ resources:
           #sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password rootpw"
           #sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password rootpw"
           DEBIAN_FRONTEND="noninteractive" apt-get install -y mysql-server
+          echo -e "[mysqld]\nmysql_native_password=ON\n" > /etc/mysql/conf.d/enable-mysql-native-password.cnf
+          systemctl restart mysql
           mysql --user="root" --password="rootpw" --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'"
           mysql --user="root" --password="password" --execute="GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION"
-          systemctl start mysql
           mysql --user="root" --password="password" --execute="CREATE DATABASE app;"
 
           git clone https://github.com/cloudacademy/gcp-lab-artifacts.git /artifacts
