@@ -188,36 +188,41 @@ data "google_project" "project" {
 
 resource "google_project_iam_binding" "binding" {
   project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
   role    = "roles/cloudfunctions.admin"
 }
 
 resource "google_project_iam_binding" "artifactregistrybinding" {
   project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
   role    = "roles/artifactregistry.writer"
+  depends_on = [ google_project_iam_binding.binding ]
 }
 
 resource "google_project_iam_binding" "sa" {
   project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
   role    = "roles/iam.serviceAccountUser"
+  depends_on = [ google_project_iam_binding.artifactregistrybinding ]
 }
 
 resource "google_project_iam_binding" "gkebinding" {
   project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
   role    = "roles/container.developer"
+  depends_on = [ google_project_iam_binding.sa ]
 }
 
 resource "google_project_iam_binding" "ingressListBinding" {
   project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
   role    = "roles/compute.networkViewer"
+  depends_on = [ google_project_iam_binding.gkebinding ]
 }
 
 resource "google_project_iam_binding" "storageAdminBinding" {
   project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
   role    = "roles/storage.admin"
+  depends_on = [ google_project_iam_binding.ingressListBinding ]
 }
