@@ -188,30 +188,36 @@ data "google_project" "project" {
 
 resource "google_project_iam_binding" "binding" {
   project = var.project_name
-  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
+  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
   role    = "roles/cloudfunctions.admin"
 }
 
 resource "google_project_iam_binding" "artifactregistrybinding" {
   project = var.project_name
-  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
-  role    = "roles/artifactregistry.admin"
+  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  role    = "roles/artifactregistry.writer"
 }
 
 resource "google_project_iam_binding" "sa" {
   project = var.project_name
-  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
+  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
   role    = "roles/iam.serviceAccountUser"
 }
 
 resource "google_project_iam_binding" "gkebinding" {
   project = var.project_name
-  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
+  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
   role    = "roles/container.developer"
 }
 
 resource "google_project_iam_binding" "ingressListBinding" {
   project = var.project_name
-  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
+  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
   role    = "roles/compute.networkViewer"
+}
+
+resource "google_project_iam_binding" "ingressListBinding" {
+  project = var.project_name
+  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  role    = "roles/storage.admin"
 }
