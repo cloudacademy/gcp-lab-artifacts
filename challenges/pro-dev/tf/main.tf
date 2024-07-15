@@ -195,7 +195,7 @@ resource "google_project_iam_binding" "binding" {
 resource "google_project_iam_binding" "artifactregistrybinding" {
   project = var.project_name
   members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
-  role    = "roles/artifactregistry.writer"
+  role    = "roles/artifactregistry.admin"
 }
 
 resource "google_project_iam_binding" "sa" {
