@@ -216,7 +216,7 @@ resource "google_project_iam_binding" "ingressListBinding" {
   role    = "roles/compute.networkViewer"
 }
 
-resource "google_project_iam_binding" "ingressListBinding" {
+resource "google_project_iam_binding" "storageAdminBinding" {
   project = var.project_name
   members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
   role    = "roles/storage.admin"
