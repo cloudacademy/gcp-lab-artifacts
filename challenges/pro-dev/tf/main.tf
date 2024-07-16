@@ -41,7 +41,7 @@ resource "google_cloudbuild_trigger" "api_cloud_build_trigger" {
     repo_name   = var.api_repository_name
     branch_name = var.branch_name
   }
-
+  service_account = "projects/${var.project_name}/serviceAccounts/${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"
   filename = "cloudbuild.yaml"
   substitutions = {
     _REPOSITORY   = var.app_name
@@ -49,6 +49,8 @@ resource "google_cloudbuild_trigger" "api_cloud_build_trigger" {
     _REGION       = var.region
     _ZONE         = "us-central1-b"
     _CLUSTER      = "lab-cluster"
+    _BUCKET_NAME = var.bucket_name
+    _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"
   }
 
   depends_on = [google_sourcerepo_repository.api_repo]
@@ -61,7 +63,7 @@ resource "google_cloudbuild_trigger" "votes_cloud_build_trigger" {
     repo_name   = var.votes_repository_name
     branch_name = var.branch_name
   }
-
+  service_account = "projects/${var.project_name}/serviceAccounts/${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"
   filename = "cloudbuild.yaml"
   substitutions = {
     _REPOSITORY   = var.app_name
@@ -69,6 +71,8 @@ resource "google_cloudbuild_trigger" "votes_cloud_build_trigger" {
     _REGION       = var.region
     _ZONE         = "us-central1-b"
     _CLUSTER      = "lab-cluster"
+    _BUCKET_NAME = var.bucket_name
+    _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"
   }
 
   depends_on = [google_sourcerepo_repository.votes_repo]
@@ -81,7 +85,7 @@ resource "google_cloudbuild_trigger" "upvote_cloud_build_trigger" {
     repo_name   = var.upvote_repository_name
     branch_name = var.branch_name
   }
-
+  service_account = "projects/${var.project_name}/serviceAccounts/${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"
   filename = "cloudbuild.yaml"
   substitutions = {
     _REPOSITORY   = var.app_name
@@ -89,6 +93,8 @@ resource "google_cloudbuild_trigger" "upvote_cloud_build_trigger" {
     _REGION       = "us-central"
     _ZONE         = "us-central1-b"
     _CLUSTER      = "lab-cluster"
+    _BUCKET_NAME = var.bucket_name
+    _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"
   }
 
   depends_on = [google_sourcerepo_repository.upvote_repo]
@@ -101,12 +107,14 @@ resource "google_cloudbuild_trigger" "votes_function_cloud_build_trigger" {
     repo_name   = var.votes_function_repository_name
     branch_name = var.branch_name
   }
-
+  service_account = "projects/${var.project_name}/serviceAccounts/${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"
   filename = "cloudbuild.yaml"
   substitutions = {
     _REPOSITORY     = var.app_name
     _SERVICE_NAME   = var.votes_function_service_name
     _REGION         = var.region
+    _BUCKET_NAME = var.bucket_name
+    _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"
   }
 
   depends_on = [google_sourcerepo_repository.votes_function_repo]
@@ -119,12 +127,14 @@ resource "google_cloudbuild_trigger" "upvote_function_cloud_build_trigger" {
     repo_name   = var.upvote_function_repository_name
     branch_name = var.branch_name
   }
-
+  service_account = "projects/${var.project_name}/serviceAccounts/${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"
   filename = "cloudbuild.yaml"
   substitutions = {
     _REPOSITORY   = var.app_name
     _SERVICE_NAME = var.upvote_function_service_name
     _REGION       = var.region
+    _BUCKET_NAME = var.bucket_name
+    _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"
   }
 
   depends_on = [google_sourcerepo_repository.upvote_function_repo]
@@ -170,7 +180,7 @@ resource "google_artifact_registry_repository" "app-repo" {
 
 
 #----------------------------------------------------------------------------------------------
-#  Grant Cloud Build Permission
+#  Grant Permissions
 #----------------------------------------------------------------------------------------------
 
 data "google_project" "project" {
@@ -178,30 +188,34 @@ data "google_project" "project" {
 
 resource "google_project_iam_binding" "binding" {
   project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
   role    = "roles/cloudfunctions.admin"
 }
 
 resource "google_project_iam_binding" "artifactregistrybinding" {
   project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
   role    = "roles/artifactregistry.writer"
+  depends_on = [ google_project_iam_binding.binding ]
 }
 
 resource "google_project_iam_binding" "sa" {
   project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
   role    = "roles/iam.serviceAccountUser"
+  depends_on = [ google_project_iam_binding.artifactregistrybinding ]
 }
 
 resource "google_project_iam_binding" "gkebinding" {
   project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
   role    = "roles/container.developer"
+  depends_on = [ google_project_iam_binding.sa ]
 }
 
 resource "google_project_iam_binding" "ingressListBinding" {
   project = var.project_name
-  members = ["serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"]
+  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
   role    = "roles/compute.networkViewer"
+  depends_on = [ google_project_iam_binding.gkebinding ]
 }
