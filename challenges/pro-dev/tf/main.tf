@@ -219,10 +219,3 @@ resource "google_project_iam_binding" "ingressListBinding" {
   role    = "roles/compute.networkViewer"
   depends_on = [ google_project_iam_binding.gkebinding ]
 }
-
-resource "google_project_iam_binding" "storageAdminBinding" {
-  project = var.project_name
-  members = ["serviceAccount:${var.project_name}-init@${var.project_name}.iam.gserviceaccount.com"]
-  role    = "roles/storage.admin"
-  depends_on = [ google_project_iam_binding.ingressListBinding ]
-}
