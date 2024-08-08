@@ -65,6 +65,7 @@ resources:
           echo "c.NotebookApp.ip = '0.0.0.0'" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
           echo "c.NotebookApp.port = 8080" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
           echo "c.NotebookApp.token = ''" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
+          echo "c.NotebookApp.password = {{ properties["password"] }}" >> /home/jupyter/.jupyter/jupyter_notebook_config.py
           chown -R jupyter:jupyter /home/jupyter/
           systemctl restart jupyter
       {% if properties["mail"] %}
