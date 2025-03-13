@@ -15,7 +15,7 @@ resources:
   action: gcp-types/cloudresourcemanager-v1:cloudresourcemanager.projects.setIamPolicy
   properties:
     resource: {{ env['project_number'] }}
-    policy: $(ref.get-iam-policy)
+    policy: $(ref.get-iam-policy{{ nameSuffix }})
     gcpIamPolicyPatch:
       add:
 {% for role in roles %}
