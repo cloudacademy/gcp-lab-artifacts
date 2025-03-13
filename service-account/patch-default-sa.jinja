@@ -1,4 +1,5 @@
 {% set roles = properties['roles'] %}
+{% set serviceAccountEmail = properties['serviceAccountEmail'] or env['project_number'] ~ '-compute@developer.gserviceaccount.com' %}
 
 resources:
 - name: get-iam-policy
@@ -19,5 +20,5 @@ resources:
 {% for role in roles %}
       - role: {{ role }}
         members: 
-        - serviceAccount:{{ env['project_number'] }}-compute@developer.gserviceaccount.com
+        - serviceAccount:{{ serviceAccountEmail }}
 {% endfor %}
