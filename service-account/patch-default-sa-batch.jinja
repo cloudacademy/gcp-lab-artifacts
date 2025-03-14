@@ -1,0 +1,23 @@
+{% set patches = properties['patches'] %}
+
+resources:
+- name: get-iam-policy
+  action: gcp-types/cloudresourcemanager-v1:cloudresourcemanager.projects.getIamPolicy
+  properties:
+    resource: {{ env['project_number'] }}
+  metadata:
+    runtimePolicy:
+    - 'UPDATE_ALWAYS'
+
+- name: patch-iam-policy
+  action: gcp-types/cloudresourcemanager-v1:cloudresourcemanager.projects.setIamPolicy
+  properties:
+    resource: {{ env['project_number'] }}
+    policy: $(ref.get-iam-policy)
+    gcpIamPolicyPatch:
+      add:
+{% for patch in patches %}
+      - role: {{ patch['role'] }}
+        members: 
+        - serviceAccount:{{ patch['serviceAccountEmail'] }}
+{% endfor %}
