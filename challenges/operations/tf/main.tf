@@ -80,10 +80,16 @@ resource "google_project_iam_binding" "storage_pubsub" {
   role    = "roles/pubsub.publisher"
 }
 
+resource "google_project_service" "enable_service_usage" {
+  project = var.project_name
+  service = "serviceusage.googleapis.com"
+}
+
 resource "google_project_service_identity" "pubsub_sa" {
   provider = google-beta
   project  = var.project_name
   service  = "pubsub.googleapis.com"
+  depends_on = [google_project_service.enable_service_usage]
 }
 
 resource "google_project_iam_member" "pubsub_token_creator" {
