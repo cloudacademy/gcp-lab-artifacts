@@ -17,6 +17,11 @@ resource "google_sourcerepo_repository" "repo" {
 #  CLOUD BUILD
 #      - Create Build Trigger
 #----------------------------------------------------------------------------------------------
+resource "google_project_service" "serviceusage" {
+  project = google_project.project.id
+  service = "serviceusage.googleapis.com"
+  disable_dependent_services = true
+}
 
 resource "google_service_account" "cloudbuild_sa" {
   account_id   = "cal-lab-sa"
