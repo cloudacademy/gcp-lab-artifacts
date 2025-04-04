@@ -18,7 +18,7 @@ resource "google_sourcerepo_repository" "repo" {
 #      - Create Build Trigger
 #----------------------------------------------------------------------------------------------
 resource "google_project_service" "serviceusage" {
-  project = google_project.project.id
+  project = var.project_name
   service = "serviceusage.googleapis.com"
   disable_dependent_services = true
 }
