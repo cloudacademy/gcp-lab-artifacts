@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "6.28.0"
+    }
+  }
+  required_version = ">= 1.0.0"
+}
+
 provider "google" {
   project = var.project_name
   region = var.region
@@ -34,13 +44,13 @@ resource "google_cloudbuild_trigger" "trigger" {
     repo_name = var.repository_name
     branch_name = var.branch_name
   }
-  service_account = google_service_account.cloudbuild_sa.email
+  service_account = "/projects/${var.project_name}/serviceAccounts/${google_service_account.cloudbuild_sa.email}"
   filename = "cloudbuild.yaml"
   substitutions = {
     _SERVICE_NAME= var.service_name
     _REGION = var.region
     _BUCKET_NAME = var.bucket_name
-    _SERVICE_ACCOUNT = google_service_account.cloudbuild_sa.email
+    _SERVICE_ACCOUNT = "/projects/${var.project_name}/serviceAccounts/${google_service_account.cloudbuild_sa.email}"
   }
 }
 
