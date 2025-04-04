@@ -27,16 +27,6 @@ resource "google_sourcerepo_repository" "repo" {
 #  CLOUD BUILD
 #      - Create Build Trigger
 #----------------------------------------------------------------------------------------------
-resource "google_project_service" "serviceusage" {
-  project = var.project_name
-  service = "serviceusage.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_service_account" "cloudbuild_sa" {
-  account_id   = "cal-lab-sa"
-  display_name = "cal-lab-sa"
-}
 
 resource "google_cloudbuild_trigger" "trigger" {
   name = var.repository_name
@@ -44,13 +34,12 @@ resource "google_cloudbuild_trigger" "trigger" {
     repo_name = var.repository_name
     branch_name = var.branch_name
   }
-  service_account = "/projects/${var.project_name}/serviceAccounts/${google_service_account.cloudbuild_sa.email}"
+
   filename = "cloudbuild.yaml"
   substitutions = {
     _SERVICE_NAME= var.service_name
     _REGION = var.region
     _BUCKET_NAME = var.bucket_name
-    _SERVICE_ACCOUNT = "/projects/${var.project_name}/serviceAccounts/${google_service_account.cloudbuild_sa.email}"
   }
 }
 
@@ -118,6 +107,24 @@ resource "google_project_iam_binding" "compute_eventarc" {
   project = var.project_name
   members  = ["serviceAccount:${data.google_compute_default_service_account.default.email}"]
   role    = "roles/eventarc.eventReceiver"
+}
+
+resource "google_project_service_identity" "cloudbuild_sa" {
+  provider = google-beta
+  project  = var.project_name
+  service  = "cloudbuild.googleapis.com"
+}
+
+resource "google_project_iam_member" "cloudbuild_sa_run_admin" {
+  project = var.project_name
+  member  = google_project_service_identity.cloudbuild_sa.member
+  role    = "roles/run.admin"
+}
+
+resource "google_project_iam_member" "cloudbuild_sa_user" {
+  project = var.project_name
+  member  = google_project_service_identity.cloudbuild_sa.member
+  role    = "roles/iam.serviceAccountUser"
 }
 
 #----------------------------------------------------------------------------------------------
