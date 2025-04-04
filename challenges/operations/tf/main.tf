@@ -18,19 +18,24 @@ resource "google_sourcerepo_repository" "repo" {
 #      - Create Build Trigger
 #----------------------------------------------------------------------------------------------
 
+resource "google_service_account" "cloudbuild_sa" {
+  account_id   = "cal-lab-sa"
+  display_name = "cal-lab-sa"
+}
+
 resource "google_cloudbuild_trigger" "trigger" {
   name = var.repository_name
   trigger_template {
     repo_name = var.repository_name
     branch_name = var.branch_name
   }
-  service_account = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
+  service_account = google_service_account.cloudbuild_sa.email
   filename = "cloudbuild.yaml"
   substitutions = {
     _SERVICE_NAME= var.service_name
     _REGION = var.region
     _BUCKET_NAME = var.bucket_name
-    _SERVICE_ACCOUNT = "projects/${var.project_name}/serviceAccounts/${var.project_name}-sa@${var.project_name}.iam.gserviceaccount.com"
+    _SERVICE_ACCOUNT = google_service_account.cloudbuild_sa.email
   }
 }
 
@@ -70,7 +75,6 @@ resource "google_cloud_run_service_iam_member" "allUsers" {
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
-
 data "google_storage_project_service_account" "gcs_account" {
 }
 
@@ -80,16 +84,10 @@ resource "google_project_iam_binding" "storage_pubsub" {
   role    = "roles/pubsub.publisher"
 }
 
-resource "google_project_service" "enable_service_usage" {
-  project = var.project_name
-  service = "serviceusage.googleapis.com"
-}
-
 resource "google_project_service_identity" "pubsub_sa" {
   provider = google-beta
   project  = var.project_name
   service  = "pubsub.googleapis.com"
-  depends_on = [google_project_service.enable_service_usage]
 }
 
 resource "google_project_iam_member" "pubsub_token_creator" {
