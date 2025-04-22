@@ -15,14 +15,19 @@ resources:
   properties:
     accountId: {{ saIdentifier }}
     displayName: {{ displayName }}
-{% for role in roles %}
-- name: bind-iam-policy-{{ identifierSuffix }}-{{ loop.index }}
-  type: gcp-types/cloudresourcemanager-v1:virtual.projects.iamMemberBinding
+
+- name: project
   properties:
-    resource: {{ projectName }}
-    role: {{ role }}
-    member: serviceAccount:$(ref.{{ saIdentifier }}.email)
-{% endfor %}
+    projectId: env['project']
+  type: cloudresourcemanager.v1.project
+  accessControl:
+    gcpIamPolicy:
+      bindings:
+      {% for role in roles %}
+        - role: {{ role }}
+          members:
+            - serviceAccount:$(ref.{{ saIdentifier }}.email)
+      {% endfor %}
 
 outputs:
 - name: name
