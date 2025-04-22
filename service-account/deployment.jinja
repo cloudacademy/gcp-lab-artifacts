@@ -18,7 +18,7 @@ resources:
 
 - name: project
   properties:
-    projectId: env['project']
+    projectId: {{ env['project'] }}
   type: cloudresourcemanager.v1.project
   accessControl:
     gcpIamPolicy:
