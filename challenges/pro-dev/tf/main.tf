@@ -219,13 +219,3 @@ resource "google_project_iam_binding" "ingressListBinding" {
   role    = "roles/compute.networkViewer"
   depends_on = [ google_project_iam_binding.gkebinding ]
 }
-
-#----------------------------------------------------------------------------------------------
-#  RUNTIME CONFIGURATION
-#      - Create config holder for lab outputs and status
-#----------------------------------------------------------------------------------------------
-
-resource "google_runtimeconfig_config" "lab_config" {
-  name    = "lab-config"
-  project = var.project_name
-}
